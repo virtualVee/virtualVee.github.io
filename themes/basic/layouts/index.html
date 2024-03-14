@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en-GB">
+{{ define "main" }}
 
-<head>
-    <meta charset="utf-8">
-    <title>{{ .Site.Title }}</title>
-</head>
+{{ .Content }}
 
-<body>
-    <h1>{{ .Site.Title }}</h1>
-    {{ .Content }}
-</body>
-
-</html>
+{{ end }}
