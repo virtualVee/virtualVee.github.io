@@ -1,0 +1,15 @@
+# Hugo generated website
+/public/
+
+/resources/_gen/
+
+# Hugo temporary files
+.hugo_build.lock
+
+# macOS files
+.DS_Store
+
+# Local environment files
+.env
+.env.*
+!.env.example

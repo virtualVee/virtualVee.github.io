@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div class="container">
+  <section class="section projects-section">
+    <p class="eyebrow">Selected work & experiments</p>
+    <h1>Projects</h1>
+
+    <p class="section-intro">
+      A collection of projects exploring technical documentation, software, and
+      the challenge of making complex technology easier to understand.
+    </p>
+
+    <div class="project-grid">
+      {{ range $index, $project := .RegularPagesRecursive}} {{ $cardStyle :=
+      $project.Params.cardStyle | default "standard" }}
+
+      <article class="project-card project-card--{{ $cardStyle }}">
+        <div class="project-card-top">
+          <span class="project-type">
+            {{ $project.Params.category | default "Project category" }}
+          </span>
+
+          <span class="project-number">
+            {{ printf "%02d" (add $index 1) }}
+          </span>
+        </div>
+
+        <h2>{{ $project.Title }}</h2>
+
+        <p>{{ $project.Description | default $project.Summary | plainify }}</p>
+
+        <a class="project-link" href="{{ $project.RelPermalink }}">
+          Explore project <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+      {{ end }}
+    </div>
+  </section>
+</div>
+{{ end }}

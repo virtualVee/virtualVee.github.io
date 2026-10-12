@@ -1,0 +1,25 @@
+{{ define "main" }}
+<div class="container">
+  <section class="section project-page">
+    <header class="project-header">
+      <p class="eyebrow">{{ .Params.category | default "Project" }}</p>
+
+      <h1>{{ .Title }}</h1>
+
+      {{ with .Description }}
+
+      <p class="project-page-description">{{ . }}</p>
+
+      {{ end }}
+    </header>
+
+    <div class="page-content">{{ .Content }}</div>
+
+    <footer class="project-page-footer">
+      <a class="project-back-link" href="/projects/">
+        ← Back to all projects
+      </a>
+    </footer>
+  </section>
+</div>
+{{ end }}

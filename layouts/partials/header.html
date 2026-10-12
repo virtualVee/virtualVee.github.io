@@ -1,0 +1,20 @@
+<header class="site-header">
+  <nav class="navigation container" aria-label="Main navigation">
+    <a class="brand" href="{{ "/" | relURL }}">{{ .Site.Title }}</a>
+
+    <div class="navigation-links">
+      <a href="{{ "/" | relURL }}">Home</a>
+      <a href="{{ "/projects/" | relURL }}">Projects</a>
+      <a href="{{ "/about/" | relURL }}">About</a>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch to light mode"
+        title="Switch to light mode"
+      >
+        ☀
+      </button>
+    </div>
+  </nav>
+</header>
