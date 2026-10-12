@@ -40,9 +40,7 @@ jobs:
           echo "${RUNNER_TEMP}/hugo" >> "$GITHUB_PATH"
 
       - name: Build site
-        run: |
-          hugo --gc --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: hugo --gc --minify
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
