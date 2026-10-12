@@ -352,22 +352,73 @@ h3 {
   height: 100%;
 }
 
-/* Featured project */
+/* Featured project card*/
 .project-card--featured {
   grid-row: span 2;
   min-height: 360px;
   padding: 36px;
 }
 
-/* Wider project */
+/* Wider project card*/
 .project-card--wide {
   grid-column: 1 / -1;
   min-height: 240px;
 }
 
-/* Fill the final row when the project count is odd */
-.project-card:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
+/* Compact project card — editorial summary style */
+.project-card--compact {
+  min-height: 170px;
+  padding: 20px;
+  justify-content: center;
+  background-color: transparent;
+  border-left: 3px solid var(--color-primary);
+}
+
+.project-card--compact .project-card-top {
+  margin-bottom: 12px;
+}
+
+.project-card--compact .project-type {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-card--compact .project-number {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.project-card--compact h2 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.project-card--compact p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.project-card--compact .project-link {
+  margin-top: 0;
+  font-size: 0.85rem;
+}
+
+/* Placeholder card */
+.project-card--placeholder {
+  justify-content: center;
+  border-style: dashed;
+  background-color: transparent;
+  opacity: 0.8;
+}
+
+.project-card--placeholder h2 {
+  color: var(--color-text);
+}
+
+.project-card--placeholder p {
+  max-width: 38ch;
 }
 
 /* Category and project number */

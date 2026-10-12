@@ -2,7 +2,6 @@
 title: "[Project 05]"
 date: 2026-10-12
 draft: false
-cardStyle: standard
 category: "[Placeholder Category]"
 description: "[A short placeholder description for this project.]"
 ---
