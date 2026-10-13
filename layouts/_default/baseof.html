@@ -14,14 +14,6 @@
     {{ end }}
   </title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <script>
   try {
     const savedTheme = localStorage.getItem("theme");
@@ -39,9 +31,11 @@
   <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
   {{ partial "header.html" . }}
 
-  <main>
+  <main id="main-content" tabindex="-1">
     {{ block "main" . }}{{ end }}
   </main>
 

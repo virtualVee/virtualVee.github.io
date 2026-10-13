@@ -1,5 +1,43 @@
 /* ========================================
 
+   Self-hosted fonts
+
+======================================== */
+
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/sofia-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/sofia-sans-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/sofia-sans-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Courier Prime";
+  src: url("/fonts/courier-prime-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================================
+
 1. Design settings
     ======================================== */
 
@@ -13,33 +51,35 @@
   --color-text: #f0ece9;
   --color-text-muted: #b7b0b4;
 
-  --color-primary: #873260;
-  --color-primary-hover: #c25b93;
+  --color-primary: #eeba0b;
+  --color-primary-hover: #ffd04d;
 
   --color-border: #454047;
 
   --color-accent: var(--color-primary);
   --color-muted: var(--color-text-muted);
 
-  --font-heading: "Courier Prime", "Courier New", monospace;
-  --font-body: "Nunito Sans", sans-serif;
+  --font-heading: "Sofia Sans", sans-serif;
+  --font-body: "Sofia Sans", sans-serif;
+  --font-editorial: "Courier Prime", "Courier New", monospace;
 }
 
-/* Muted light theme */
+/* Light theme — Ink & Paper */
+
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --color-background: #eae4d8;
-  --color-surface: #e1d9cb;
-  --color-surface-hover: #d7ccbc;
+  --color-background: #f5f3ee;
+  --color-surface: #eae8e2;
+  --color-surface-hover: #dedbd4;
 
-  --color-text: #332d2a;
-  --color-text-muted: #71675f;
+  --color-text: #242424;
+  --color-text-muted: #62605c;
 
-  --color-primary: #873260;
-  --color-primary-hover: #a44777;
+  --color-primary: #242424;
+  --color-primary-hover: #454545;
 
-  --color-border: #cec2b2;
+  --color-border: #c9c6bf;
 }
 
 /* ========================================
@@ -86,14 +126,10 @@ p {
 h1,
 h2,
 h3 {
-  line-height: 1.3;
-}
-
-h1,
-h2,
-h3,
-.brand {
   font-family: var(--font-heading);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 h1 {
@@ -142,13 +178,14 @@ h3 {
 
 .brand {
   color: var(--color-primary-hover);
+  font-family: var(--font-editorial);
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 400;
   text-decoration: none;
 }
 
 .brand:hover {
-  color: #e0a4be;
+  color: var(--color-primary-hover);
 }
 
 .brand:focus-visible {
@@ -158,6 +195,7 @@ h3 {
 
 .navigation-links {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 24px;
 }
@@ -175,8 +213,8 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid var(--color-border);
   border-radius: 50%;
@@ -214,8 +252,9 @@ h3 {
 .eyebrow {
   margin-bottom: 24px;
   color: var(--color-accent);
+  font-family: var(--font-editorial);
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -243,7 +282,7 @@ h3 {
   border: 1px solid var(--color-accent);
   border-radius: 3px;
   background-color: var(--color-accent);
-  color: #21191d;
+  color: var(--color-background);
   font-family: var(--font-body);
   font-weight: 600;
   text-decoration: none;
@@ -256,7 +295,7 @@ h3 {
 .button:hover {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  color: #21191d;
+  color: var(--color-background);
 }
 
 .button-secondary {
@@ -314,6 +353,8 @@ h3 {
 .project-card {
   position: relative;
   display: flex;
+  color: var(--color-text);
+  text-decoration: none;
   flex-direction: column;
   align-items: flex-start;
   min-height: 280px;
@@ -348,6 +389,11 @@ h3 {
   box-shadow: 0 10px 24px rgb(0 0 0 / 8%);
 }
 
+.project-card:focus-visible {
+  outline: 3px solid var(--color-primary-hover);
+  outline-offset: 4px;
+}
+
 .project-card:hover::before {
   height: 100%;
 }
@@ -379,14 +425,11 @@ h3 {
 }
 
 .project-card--compact .project-type {
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
 .project-card--compact .project-number {
   font-size: 0.75rem;
-  opacity: 0.65;
 }
 
 .project-card--compact h2 {
@@ -410,7 +453,6 @@ h3 {
   justify-content: center;
   border-style: dashed;
   background-color: transparent;
-  opacity: 0.8;
 }
 
 .project-card--placeholder h2 {
@@ -434,17 +476,17 @@ h3 {
 .project-type {
   margin-bottom: 0;
   color: var(--color-primary-hover);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: var(--font-editorial);
+  font-size: 0.85rem;
+  font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .project-number {
   color: var(--color-text-muted);
-  font-family: var(--font-heading);
+  font-family: var(--font-editorial);
   font-size: 0.9rem;
-  opacity: 0.7;
 }
 
 /* Project titles and descriptions */
@@ -484,44 +526,6 @@ h3 {
   transform: translate(3px, -3px);
 }
 
-/* Smaller screens */
-@media (max-width: 640px) {
-  .project-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 32px;
-  }
-
-  .project-card,
-  .project-card--featured,
-  .project-card--wide {
-    grid-column: auto;
-    min-height: 250px;
-    padding: 24px;
-  }
-
-  .project-card-top {
-    margin-bottom: 24px;
-  }
-}
-
-/* Respect reduced-motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .project-card,
-  .project-card::before,
-  .project-link span {
-    transition: none;
-  }
-
-  .project-card:hover {
-    transform: none;
-  }
-
-  .project-link:hover span {
-    transform: none;
-  }
-}
-
 /* ========================================
 9. Footer
 ======================================== */
@@ -551,9 +555,26 @@ h3 {
 10. Keyboard focus and accessibility
 ======================================== */
 
-a:focus-visible,
-button:focus-visible {
+:focus-visible {
   outline: 2px solid var(--color-primary-hover);
+  outline-offset: 4px;
+}
+
+/* Skip navigation link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 1000;
+  padding: 12px 16px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 16px;
+  outline: 3px solid var(--color-primary-hover);
   outline-offset: 4px;
 }
 
@@ -579,6 +600,20 @@ button:focus-visible {
 
   .project-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .project-card,
+  .project-card--featured,
+  .project-card--wide {
+    grid-column: auto;
+    min-height: 250px;
+    padding: 24px;
+  }
+
+  .project-card-top {
+    margin-bottom: 24px;
   }
 
   .hero {
@@ -591,6 +626,12 @@ button:focus-visible {
 
   h1 {
     overflow-wrap: anywhere;
+  }
+
+  .footer-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
   }
 }
 
@@ -607,17 +648,15 @@ button:focus-visible {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
-
     animation-iteration-count: 1 !important;
-
     transition-duration: 0.01ms !important;
   }
 
-  .footer-content {
-    align-items: flex-start;
+  .project-card:hover {
+    transform: none;
+  }
 
-    flex-direction: column;
-
-    gap: 8px;
+  .project-link:hover span {
+    transform: none;
   }
 }
