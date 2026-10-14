@@ -13,6 +13,48 @@
       {{ end }}
     </header>
 
+    {{ if or .Params.role .Params.tools .Params.status .Params.year }}
+    <dl class="project-meta">
+      {{ with .Params.role }}
+      <div class="project-meta-item">
+        <dt>Role</dt>
+        <dd>{{ . }}</dd>
+      </div>
+      {{ end }} {{ with .Params.tools }}
+      <div class="project-meta-item">
+        <dt>Tools</dt>
+        <dd>{{ delimit . ", " }}</dd>
+      </div>
+      {{ end }} {{ with .Params.status }}
+      <div class="project-meta-item">
+        <dt>Status</dt>
+        <dd>{{ . }}</dd>
+      </div>
+      {{ end }} {{ with .Params.year }}
+      <div class="project-meta-item">
+        <dt>Year</dt>
+        <dd>{{ . }}</dd>
+      </div>
+      {{ end }}
+    </dl>
+    {{ end }} {{ if or .Params.github .Params.demo .Params.documentation }}
+    <nav class="project-actions" aria-label="Project resources">
+      {{ with .Params.github }}
+      <a href="{{ . | safeURL }}" target="_blank" rel="noopener noreferrer">
+        View on GitHub ↗
+      </a>
+      {{ end }} {{ with .Params.demo }}
+      <a href="{{ . | safeURL }}" target="_blank" rel="noopener noreferrer">
+        View live project ↗
+      </a>
+      {{ end }} {{ with .Params.documentation }}
+      <a href="{{ . | safeURL }}" target="_blank" rel="noopener noreferrer">
+        View documentation ↗
+      </a>
+      {{ end }}
+    </nav>
+    {{ end }}
+
     <div class="page-content">{{ .Content }}</div>
 
     <footer class="project-page-footer">

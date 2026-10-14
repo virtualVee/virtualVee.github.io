@@ -4,3 +4,7 @@ title = 'Vanessa Correia'
 
 [params]
 description = "This portfolio is under restructuring. Watch this space!"
+
+[markup.highlight]
+    style = "gruvbox"
+    noClasses = true

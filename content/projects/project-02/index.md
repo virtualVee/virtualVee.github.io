@@ -1,8 +1,8 @@
 ---
 title: "[Project 02]"
 date: 2026-10-12
-draft: false
-category: "[Placeholder Category]"
+draft: true
+category: "[Category placeholder]"
 description: "[A short placeholder description for this project.]"
 ---
 
