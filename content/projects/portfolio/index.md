@@ -25,7 +25,7 @@ This portfolio is a project in its own right: a place to bring together my work 
 
 - **Structure and clarity:** Organising the site around a simple Home, About and Projects structure, with concise summaries and room for more detail.
 - **Design and accessibility:** Building custom Hugo templates with responsive layouts, local fonts, light and dark themes, keyboard focus styles and reduced-motion support.
-- **Content and iteration:** Refining my professional introduction, adding a CV download and LinkedIn link, and turning development notes into readable project stories.
+- **Content and iteration:** Refining my professional introduction, adding profile links and preparing a contact form, and turning development notes into readable project stories.
 
 ## Keeping the content focused
 
@@ -33,7 +33,7 @@ Each project starts with a short overview, key contributions and next steps, so 
 
 ## Checking changes
 
-I’ve added automated regression tests for project search, combined filters, date sorting, empty states and Reset. A separate check builds the site and inspects internal links, assets, page metadata and the CV download. Browser tests also check the download filename and file content, links opening in new tabs, and responsive layouts at phone, tablet and desktop widths in both themes.
+I’ve added automated regression tests for project search, combined filters, date sorting, empty states and Reset. A separate check builds the site and inspects internal links, assets, page metadata and the contact-form setup. Browser tests also check that the CV and direct email link are removed, links open in new tabs, and responsive layouts at phone, tablet and desktop widths in both themes.
 
 The checks run locally with one command and are configured to run in GitHub Actions before deployment. They complement manual phone, keyboard and theme checks; they do not replace a full accessibility review.
 

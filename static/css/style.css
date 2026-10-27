@@ -951,3 +951,63 @@ h3 {
 .project-card--compact .project-card-meta {
   margin-bottom: 16px;
 }
+
+.contact-section {
+  max-width: 680px;
+  margin-top: 56px;
+  scroll-margin-top: 24px;
+}
+
+.contact-form fieldset {
+  padding: 0;
+  margin: 24px 0 0;
+  border: 0;
+  min-width: 0;
+}
+
+.contact-legend {
+  padding: 0;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.contact-field textarea {
+  resize: vertical;
+}
+
+.contact-form .button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.contact-form fieldset:disabled {
+  opacity: 0.65;
+}
+
+.contact-form fieldset:disabled .button {
+  cursor: not-allowed;
+}
+
+.contact-note {
+  margin-top: 16px;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}

@@ -7,7 +7,7 @@ Requirements: Hugo 0.167.0 extended (matching deployment), Node.js 22 or newer, 
 Run `npm ci` and `npx playwright install chromium` once, then `npm test` from the repository root. On Linux use `npx playwright install --with-deps chromium` to install browser system dependencies too.
 
 - `npm run test:projects`: 12 Node tests run the shipped project-controls script against synthetic projects using a minimal DOM adapter. Covers search normalization, combined filters, start/finish ordering, missing dates, empty states and Reset.
-- `npm run test:site`: builds production output in scratch storage and checks links/assets/fragments, key metadata, drafts, CV asset/name and accessible controls. Scratch files are removed automatically.
+- `npm run test:site`: builds production output in scratch storage and checks links/assets/fragments, key metadata, drafts, contact privacy and accessible controls. Scratch files are removed automatically.
 - `npm run test:browser`: Playwright runs 10 scenarios at three viewport sizes: phone 390×844, tablet 768×1024, desktop 1440×1000. Uses its own production build and temporary server on 127.0.0.1:4173; it does not reuse the personal preview on port 1313.
 - `npm run test:quick`: runs logic and generated-site checks without starting a browser.
 - `python3 scripts/check-site.py --site public`: checks an existing production build.
@@ -16,8 +16,8 @@ Run `npm ci` and `npx playwright install chromium` once, then `npm test` from th
 ## Browser scenarios
 
 - Each of Home, About, Projects and both project details loads without JavaScript errors, fits the viewport, and exposes the main heading/navigation in light and dark themes. Full-page screenshots are attached for review, with CSS animations finished for consistent capture.
-- About buttons stack at phone width and align in a row on wider screens, with at least 44px button heights.
-- Clicking Download my CV produces a successful download named `CORREIA, Vanessa_CV.pdf`; its PDF bytes match the source asset and the About page stays open.
+- GitHub and LinkedIn About buttons stack at phone width and align in a row on wider screens, with at least 44px button heights.
+- The CV download, public PDF asset and direct mailto link are absent. Required fields and invalid-email validation prevent submission; a valid submission posts to the configured Formspree endpoint. Automated browser tests intercept the request and never deliver email.
 - LinkedIn/GitHub About links and both footer links produce separate tabs and have safe new-tab attributes. External destinations are intercepted inside the tests: these checks verify browser behaviour, not third-party uptime.
 - Search, type filters, start-date sorting, finish-date empty view and Reset work together through real browser input.
 - Keyboard skip link receives focus and moves it into main content.

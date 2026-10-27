@@ -1,6 +1,4 @@
 const { test, expect } = require("@playwright/test");
-const fs = require("node:fs/promises");
-const path = require("node:path");
 const pages = ["/", "/about/", "/projects/", "/projects/portfolio/", "/projects/babsy/"];
 
 for (const route of pages) {
@@ -27,7 +25,9 @@ for (const route of pages) {
 test("About buttons stack on phones and align in a row on wider screens", async ({page}) => {
   await page.goto("/about/");
   const buttons = page.locator(".about-actions .button");
-  await expect(buttons).toHaveCount(3);
+  await expect(buttons).toHaveCount(2);
+  await expect(buttons).toHaveText(["Explore my GitHub", "Connect on LinkedIn"]);
+  await expect(buttons.first()).not.toHaveClass(/button-secondary/);
   const boxes = await Promise.all((await buttons.all()).map(button => button.boundingBox()));
   const width = page.viewportSize().width;
   for (const box of boxes) {expect(box).not.toBeNull();expect(box.height).toBeGreaterThanOrEqual(44);}
@@ -42,17 +42,36 @@ test("About buttons stack on phones and align in a row on wider screens", async 
   }
 });
 
-test("CV downloads with the requested filename and exact PDF content", async ({page}) => {
+test("contact form validates fields, protects contact details and submits to the configured endpoint", async ({page,request}) => {
   await page.goto("/about/");
-  const event = page.waitForEvent("download");
-  await page.getByRole("link",{name:"Download my CV",exact:true}).click();
-  const download = await event;
-  expect(download.suggestedFilename()).toBe("CORREIA, Vanessa_CV.pdf");
-  expect(await download.failure()).toBeNull();
-  const downloaded = await fs.readFile(await download.path());
-  expect(downloaded.subarray(0,5).toString()).toBe("%PDF-");
-  expect(downloaded.equals(await fs.readFile(path.resolve(__dirname,"../../static/downloads/vanessa-correia-cv.pdf")))).toBe(true);
-  expect(new URL(page.url()).pathname).toBe("/about/");
+  await expect(page.getByRole("link",{name:"Download my CV",exact:true})).toHaveCount(0);
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  expect((await request.get("/downloads/vanessa-correia-cv.pdf")).status()).toBe(404);
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await expect(page.getByRole("heading",{name:"Get in touch",exact:true})).toBeInViewport();
+  const form = page.locator(".contact-form");
+  const endpoint = await form.getAttribute("action");
+  expect(endpoint).toMatch(/^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/);
+  let sent;
+  await page.route(endpoint, route => {
+    sent = new URLSearchParams(route.request().postData());
+    return route.fulfill({contentType:"text/html",body:"<h1>Test submission accepted</h1>"});
+  });
+  const submit = page.getByRole("button",{name:"Send",exact:true});
+  await expect(submit).toBeEnabled();
+  await submit.click();
+  expect(sent).toBeUndefined();
+  await page.getByLabel("Name",{exact:true}).fill("Browser test");
+  await page.getByLabel("Email",{exact:true}).fill("invalid");
+  await page.getByLabel("Message",{exact:true}).fill("A browser test message with no external delivery.");
+  await submit.click();
+  expect(sent).toBeUndefined();
+  await page.getByLabel("Email",{exact:true}).fill("test@example.com");
+  await submit.click();
+  await expect(page.getByRole("heading",{name:"Test submission accepted",exact:true})).toBeVisible();
+  expect(sent.get("name")).toBe("Browser test");
+  expect(sent.get("email")).toBe("test@example.com");
+  expect(sent.get("message")).toContain("no external delivery");
 });
 
 test("About and footer external links open separate tabs", async ({page,context}) => {

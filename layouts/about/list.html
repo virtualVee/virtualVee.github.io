@@ -2,22 +2,38 @@
 <div class="container">
   <section class="section">
     <p class="eyebrow">A little introduction</p>
-
     <h1>{{ .Title }}</h1>
-
     <div class="page-content">{{ .Content }}</div>
 
     <div class="button-group about-actions">
-      <a class="button" href="{{ "/downloads/vanessa-correia-cv.pdf" | relURL }}" download="CORREIA, Vanessa_CV.pdf">
-        Download my CV
-      </a>
-      <a class="button button-secondary" href="https://www.linkedin.com/in/vanessacorreia/" target="_blank" rel="noopener noreferrer">
-        Connect on LinkedIn
-      </a>
-      <a class="button button-secondary" href="https://github.com/virtualVee" target="_blank" rel="noopener noreferrer">
-        Explore my GitHub
-      </a>
+      <a class="button" href="https://github.com/virtualVee" target="_blank" rel="noopener noreferrer">Explore my GitHub</a>
+      <a class="button button-secondary" href="https://www.linkedin.com/in/vanessacorreia/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
     </div>
+
+    {{ $endpoint := .Site.Params.contact_form_endpoint | default "" }}
+    {{ if and $endpoint (not (findRE `^https://formspree\.io/f/[A-Za-z0-9]+$` $endpoint)) }}
+      {{ errorf "Set contact_form_endpoint to the HTTPS form endpoint supplied by Formspree" }}
+    {{ end }}
+    <section class="contact-section" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Get in touch</h2>
+      <p>Have a question about my work? Use the form below to let me know your thoughts.</p>
+      {{ if not $endpoint }}<p class="contact-note" role="status">The contact form is being set up. In the meantime, you can connect with me on LinkedIn.</p>{{ end }}
+      <form class="contact-form" method="post" {{ with $endpoint }}action="{{ . }}"{{ end }}>
+        <fieldset aria-label="Contact details and message" {{ if not $endpoint }}disabled{{ end }}>
+          <label class="contact-field" for="contact-name">Name
+            <input id="contact-name" name="name" type="text" autocomplete="name" maxlength="120" required>
+          </label>
+          <label class="contact-field" for="contact-email">Email
+            <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+          </label>
+          <label class="contact-field" for="contact-message">Message
+            <textarea id="contact-message" name="message" rows="6" minlength="10" maxlength="5000" required></textarea>
+          </label>
+          <button class="button" type="submit">Send</button>
+        </fieldset>
+        <p class="contact-note">Messages are processed by <a href="https://formspree.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Formspree</a> and used to respond to your enquiry.</p>
+      </form>
+    </section>
   </section>
 </div>
 {{ end }}

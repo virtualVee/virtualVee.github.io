@@ -87,12 +87,12 @@ def audit(site):
         require(site.joinpath(route) in pages, "Missing main page: " + route)
     about = pages.get(site / "about/index.html")
     if about:
-        downloads = [a for a in about.find("a") if "download" in a]
-        require(bool(downloads), "About: missing CV download")
-        for link in downloads:
-            require(link.get("download") == "CORREIA, Vanessa_CV.pdf", "About: wrong CV download filename")
-            pdf = site / urlsplit(link["href"]).path.lstrip("/")
-            require(pdf.is_file() and pdf.read_bytes().startswith(b"%PDF-"), "About: missing/invalid PDF asset")
+        require(not any("download" in a for a in about.find("a")), "About: CV download must not be published")
+        require(not any(a.get("href", "").startswith("mailto:") for a in about.find("a")), "About: direct email must not be published")
+        require(not (site / "downloads/vanessa-correia-cv.pdf").exists(), "Private CV must not be in published output")
+        require("contact" in about.ids, "About: missing contact section")
+        for control_id in ("contact-name", "contact-email", "contact-message"):
+            require(bool(about.find("label", **{"for": control_id})), "About: missing form label " + control_id)
     projects = pages.get(site / "projects/index.html")
     if projects:
         require(any("data-project-placeholder" in a for _, a in projects.elements), "Projects: missing empty-view placeholder")
@@ -117,7 +117,7 @@ def audit(site):
             require(not (site / "projects" / source.parent.name / "index.html").exists(), "Draft published: " + source.parent.name)
     if errors:
         raise SystemExit("Site checks failed:\n- " + "\n- ".join(errors))
-    print("Site checks passed: {} HTML pages; internal links/assets, metadata, drafts, CV and project controls.".format(len(pages)))
+    print("Site checks passed: {} HTML pages; internal links/assets, metadata, drafts, contact privacy and project controls.".format(len(pages)))
 
 
 def main():
