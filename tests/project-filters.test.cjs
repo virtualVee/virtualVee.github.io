@@ -15,8 +15,8 @@ function element(dataset = {}) {
   };
 }
 function setup(records = [
-  { name: "portfolio", type: "websites", text: "Portfolio Hugo documentation", start: "2026-10-12" },
-  { name: "babsy", type: "apps", text: "Babsy baby routines Expo", start: "2026-09-24" },
+  { name: "portfolio", type: "websites", text: "Portfolio Hugo documentation", start: "2026-10-12", updated: "2026-10-27" },
+  { name: "babsy", type: "apps", text: "Babsy baby routines Expo", start: "2026-09-24", updated: "2026-10-23" },
 ]) {
   const cards = records.map(record => {
     const card = element({ projectType: record.type, projectSearch: record.text, projectUpdated: record.updated || "", projectStarted: record.start || "", projectFinished: record.finish || "" });
@@ -32,7 +32,7 @@ function setup(records = [
   grid.querySelectorAll = () => cards;
   grid.querySelector = () => placeholder;
   grid.append = card => { grid.children = grid.children.filter(c => c !== card); grid.children.push(card); };
-  const search = element(); const sort = element(); sort.value = "started-newest";
+  const search = element(); const sort = element(); sort.value = "updated-newest";
   const reset = element(); const status = element(); const empty = element(); const controls = element();
   const selectors = { "[data-project-filters]": filters, "#project-results": grid, "[data-project-filter-status]": status, "[data-project-search-sort]": controls, "#project-search": search, "#project-sort": sort, "[data-project-reset]": reset, "[data-project-empty]": empty };
   vm.runInNewContext(source, { document: { querySelector: selector => selectors[selector] } });
@@ -46,9 +46,12 @@ function setup(records = [
   };
 }
 
-test("initial view shows started projects newest first and announces the count", () => {
-  const ui = setup();
-  assert.deepEqual(ui.shown(), ["portfolio", "babsy"]);
+test("initial view shows most recently updated projects first and announces the count", () => {
+  const ui = setup([
+    {name:"older-start",type:"websites",text:"Older start",start:"2026-01-01",updated:"2026-10-27"},
+    {name:"newer-start",type:"apps",text:"Newer start",start:"2026-10-01",updated:"2026-10-02"},
+  ]);
+  assert.deepEqual(ui.shown(), ["older-start", "newer-start"]);
   assert.equal(ui.status.textContent, "Showing 2 of 2 projects");
   assert.equal(ui.placeholder.hidden, true);
   assert.equal(ui.buttons[0].attributes["aria-pressed"], "true");
@@ -77,6 +80,7 @@ test("start dates sort both ways and omit projects with no recorded start", () =
     {name:"undated", type:"apps", text:"Undated"},
     {name:"earlier", type:"apps", text:"Earlier", start:"2026-01-01"},
   ]);
+  ui.order("started-newest");
   assert.deepEqual(ui.shown(), ["later", "earlier"]);
   ui.order("started-oldest"); assert.deepEqual(ui.shown(), ["earlier", "later"]);
 });
@@ -93,6 +97,7 @@ test("empty start/finish views show the future-project placeholder", () => {
   const ui = setup(); ui.order("finished-newest");
   assert.deepEqual(ui.shown(), []); assert.equal(ui.placeholder.hidden, false);
   const noDates = setup([{name:"undated",type:"apps",text:"Undated"}]);
+  noDates.order("started-newest");
   assert.deepEqual(noDates.shown(), []); assert.equal(noDates.placeholder.hidden, false);
   const none = setup([]); assert.equal(none.placeholder.hidden, false);
 });
@@ -105,7 +110,7 @@ test("reset clears search, type and date mode and restores projects", () => {
   const ui = setup(); ui.query("missing"); ui.type("apps"); ui.order("finished-oldest"); ui.reset();
   assert.deepEqual(ui.shown(), ["portfolio", "babsy"]);
   assert.equal(ui.placeholder.hidden, true);
-  assert.equal(ui.search.value, ""); assert.equal(ui.sort.value, "started-newest");
+  assert.equal(ui.search.value, ""); assert.equal(ui.sort.value, "updated-newest");
   assert.equal(ui.empty.hidden, true);
   assert.equal(ui.buttons[0].attributes["aria-pressed"], "true");
 });

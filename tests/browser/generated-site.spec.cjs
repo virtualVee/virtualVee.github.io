@@ -84,6 +84,7 @@ function audit(pages) {
       require(Boolean(attrs["data-project-status"]?.trim()), `${attrs.href}: missing project status`);
       for (const field of ["started","updated"]) require(validDate(attrs["data-project-"+field]), `${attrs.href}: missing/invalid ${field} date`);
     }
+    require(find(projects,"option").some(a => a.value === "updated-newest" && "selected" in a), "Projects: Last updated must be the default sort");
     const options = new Set(find(projects,"option").map(a => a.value));
     require(["started-newest","started-oldest","finished-newest","finished-oldest","updated-newest"].every(value => options.has(value)), "Projects: missing date sort options");
     require(projects.elements.some(e => e.attrs.role === "status"), "Projects: missing live result count");

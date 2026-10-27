@@ -66,7 +66,7 @@
   sort.addEventListener("change", update);
   reset.addEventListener("click", () => {
     search.value = "";
-    sort.value = "started-newest";
+    sort.value = "updated-newest";
     selectedType = "all";
     update();
   });
