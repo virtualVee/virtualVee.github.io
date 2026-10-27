@@ -1,6 +1,6 @@
 ---
 title: "Projects"
-description: "A collection of technical writing, documentation, and software projects."
+description: "Projects exploring technology, process improvement and practical problem-solving."
 ---
 
-Explore my projects in technical documentation, software, and technology.
+Explore my projects and the thinking behind the work.

@@ -5,8 +5,8 @@
     <h1>Projects</h1>
 
     <p class="section-intro">
-      A collection of projects exploring technical documentation, software, and
-      the challenge of making complex technology easier to understand.
+      Projects exploring technology, process improvement and practical
+      problem-solving, with a look at the thinking behind the work.
     </p>
 
     {{ $projects := .RegularPagesRecursive }} {{ $projectCount := len $projects
@@ -40,6 +40,7 @@
 
         <span class="project-link">
           Explore project <span aria-hidden="true">↗</span>
+        </span>
       </a>
 
       {{ end }} {{ if and (gt $projectCount 0) (eq (mod $occupiedCells 2) 1) }}

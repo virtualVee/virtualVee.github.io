@@ -3,7 +3,7 @@ locale = 'en-GB'
 title = 'Vanessa Correia'
 
 [params]
-description = "This portfolio is under restructuring. Watch this space!"
+description = "Vanessa Correia’s portfolio: healthcare technology, technical analysis, process improvement and practical problem-solving."
 
 [markup.highlight]
     style = "gruvbox"
