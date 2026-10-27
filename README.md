@@ -8,9 +8,9 @@ Visit [vanessacorreia.com](https://vanessacorreia.com).
 
 Listed from newest to oldest:
 
+- **Contact:** a Formspree form with input validation, a live character counter, in-page submission feedback and retry support, plus a honeypot and Cloudflare Turnstile integration.
 - **Project listing:** concise cards ordered by last updated, with detailed pages for each project.
-- **Contact:** a form with validation, submission feedback and retry support.
-- **Automated testing:** checks for generated pages, project behaviour and responsive layouts in both themes.
+- **Automated testing:** checks for generated pages, project behaviour, contact validation and CAPTCHA handling, and responsive layouts in both themes.
 - **Project context:** case-study metadata, resource links, code presentation and page descriptions.
 - **Typography and navigation:** local fonts, keyboard skip navigation, visible focus and reduced-motion support.
 - **Site foundation:** Home, About and Projects pages, responsive layouts and light/dark themes.

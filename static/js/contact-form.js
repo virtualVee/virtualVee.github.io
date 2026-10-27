@@ -47,7 +47,7 @@
   let widgetId;
   let resetSecurity = () => {};
   if (security) {
-    const notice = text => { if (securityStatus) securityStatus.textContent = text; };
+    const notice = text => { if (securityStatus) { securityStatus.textContent = text; securityStatus.hidden = !text; } };
     const clearSecurity = text => { securityToken = ""; notice(text); };
     const script = document.createElement("script");
     script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -58,15 +58,16 @@
         widgetId = window.turnstile.render(security, {
           sitekey: security.dataset.sitekey,
           size: "flexible",
+          appearance: "interaction-only",
           theme: document.documentElement.dataset.theme || "auto",
-          callback: token => { securityToken = token; notice("Security check complete."); },
+          callback: token => { securityToken = token; notice(""); },
           "expired-callback": () => clearSecurity("Security check expired. Please complete it again."),
           "timeout-callback": () => clearSecurity("Security check timed out. Please try again."),
           "error-callback": () => clearSecurity("Security check failed. Please reload or contact me on LinkedIn."),
         });
         resetSecurity = () => {
           securityToken = "";
-          notice("Please complete the security check again.");
+          notice("");
           window.turnstile.reset(widgetId);
         };
       } catch { script.onerror(); }

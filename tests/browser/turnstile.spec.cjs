@@ -9,6 +9,13 @@ test("Turnstile gates submission, expires tokens and refreshes after failure and
   `}));
   await page.goto("/about/");
   await expect.poll(() => page.evaluate(() => !!window.challenge)).toBe(true);
+  expect(await page.evaluate(() => window.challenge.appearance)).toBe("interaction-only");
+  await expect(page.locator("#contact-security-status")).toBeHidden();
+  await page.evaluate(() => window.challenge['error-callback']());
+  await expect(page.locator("#contact-security-status")).toBeVisible();
+  await page.evaluate(() => window.challenge.callback('recovered'));
+  await expect(page.locator("#contact-security-status")).toBeHidden();
+  await page.evaluate(() => window.challenge['expired-callback']());
   let posts = 0;
   let token;
   await page.route(await page.locator(".contact-form").getAttribute("action"), route => {

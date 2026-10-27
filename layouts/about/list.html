@@ -39,7 +39,7 @@
           {{ if .Site.Params.contact_turnstile_enabled }}
           {{ if not .Site.Params.contact_turnstile_site_key }}{{ errorf "Turnstile requires a public site key" }}{{ end }}
           <div id="contact-turnstile" data-sitekey="{{ .Site.Params.contact_turnstile_site_key }}"></div>
-          <p id="contact-security-status" class="contact-note" role="status">Loading security check…</p>
+          <p id="contact-security-status" class="contact-note" role="status" hidden></p>
           <noscript><p>JavaScript is required for the security check. Please enable it or contact me on LinkedIn.</p></noscript>
           {{ end }}
           <button class="button" type="submit">Send</button>
