@@ -55,7 +55,7 @@
     });
     const filtered = selectedType !== "all" || terms.length > 0;
     if (placeholder) {
-      placeholder.hidden = visible > 0 && (filtered || placeholder.dataset.placeholderDefault !== "true");
+      placeholder.hidden = visible > 0;
       grid.append(placeholder);
     }
     grid.dataset.filtered = String(filtered || visible === 0);

@@ -82,6 +82,7 @@ test("search, type filters, date sorting and Reset work in a browser", async ({p
   await page.goto("/projects/");
   const cards = page.locator("[data-project-type]:visible");
   await expect(cards).toHaveCount(2);
+  await expect(page.locator("[data-project-placeholder]")).toBeHidden();
   await page.getByLabel("Search projects",{exact:true}).fill("EXPO");
   await expect(cards).toHaveCount(1);
   await expect(cards.first()).toContainText("Babsy");
@@ -95,9 +96,11 @@ test("search, type filters, date sorting and Reset work in a browser", async ({p
   await expect(cards.first()).toContainText("Building this portfolio");
   await page.getByRole("combobox",{name:"Sort projects",exact:true}).selectOption("finished-newest");
   await expect(cards).toHaveCount(1);
+  await expect(page.locator("[data-project-placeholder]")).toBeHidden();
   await expect(cards.first()).toContainText("Building this portfolio");
   await page.getByRole("button",{name:"Reset",exact:true}).click();
   await expect(cards).toHaveCount(2);
+  await expect(page.locator("[data-project-placeholder]")).toBeHidden();
   await expect(cards.first()).toContainText("Building this portfolio");
 });
 

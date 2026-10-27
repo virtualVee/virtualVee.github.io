@@ -9,11 +9,8 @@
       problem-solving, with a look at the thinking behind the work.
     </p>
 
-    {{ $projects := .RegularPagesRecursive }} {{ $projectCount := len $projects
-    }} {{ $wideCount := 0 }} {{ range $index, $project := $projects }} {{ if and
-    (ge $index 3) (eq (mod (sub $index 3) 4) 0) }} {{ $wideCount = add
-    $wideCount 1 }} {{ end }} {{ end }} {{ $occupiedCells := add (add
-    $projectCount 1) $wideCount }}
+    {{ $projects := .RegularPagesRecursive }}
+    {{ $projectCount := len $projects }}
 
     {{ $types := slice }}
     {{ range $projects }}
@@ -87,7 +84,7 @@
 
       {{ end }}
 
-      <article class="project-card project-card--placeholder" data-project-placeholder data-placeholder-default="{{ or (eq $projectCount 0) (eq (mod $occupiedCells 2) 1) }}" {{ if and (gt $projectCount 0) (eq (mod $occupiedCells 2) 0) }}hidden{{ end }}>
+      <article class="project-card project-card--placeholder" data-project-placeholder {{ if gt $projectCount 0 }}hidden{{ end }}>
         <div class="project-card-top">
           <span class="project-type">In progress</span>
 

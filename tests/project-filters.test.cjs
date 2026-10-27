@@ -30,7 +30,7 @@ function setup(records = [
   const buttons = ["all", "apps", "websites"].map(projectFilter => element({ projectFilter }));
   const filters = element(); filters.querySelectorAll = () => buttons;
   const grid = element(); grid.children = [...cards];
-  const placeholder = element({ placeholderDefault: "true" });
+  const placeholder = element();
   grid.querySelectorAll = () => cards;
   grid.querySelector = () => placeholder;
   grid.append = card => { grid.children = grid.children.filter(c => c !== card); grid.children.push(card); };
@@ -52,6 +52,7 @@ test("initial view shows started projects newest first and announces the count",
   const ui = setup();
   assert.deepEqual(ui.shown(), ["portfolio", "babsy"]);
   assert.equal(ui.status.textContent, "Showing 2 of 2 projects");
+  assert.equal(ui.placeholder.hidden, true);
   assert.equal(ui.buttons[0].attributes["aria-pressed"], "true");
 });
 test("search ignores case and extra spaces and combines all words", () => {
@@ -105,6 +106,7 @@ test("equal dates keep a stable order", () => {
 test("reset clears search, type and date mode and restores projects", () => {
   const ui = setup(); ui.query("missing"); ui.type("apps"); ui.order("finished-oldest"); ui.reset();
   assert.deepEqual(ui.shown(), ["portfolio", "babsy"]);
+  assert.equal(ui.placeholder.hidden, true);
   assert.equal(ui.search.value, ""); assert.equal(ui.sort.value, "started-newest");
   assert.equal(ui.empty.hidden, true);
   assert.equal(ui.buttons[0].attributes["aria-pressed"], "true");
