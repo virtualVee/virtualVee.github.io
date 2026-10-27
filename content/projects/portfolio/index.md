@@ -10,6 +10,7 @@ role: "Content, structure and implementation"
 tools: [Hugo, Markdown, CSS, JavaScript, Node.js, Python, Playwright, GitHub Pages]
 status: "In progress"
 year: 2026
+updated_date: 2026-10-27
 development_date: 2026-10-12
 github: "https://github.com/virtualVee/virtualVee.github.io"
 ---
@@ -40,6 +41,6 @@ I use AI assistance to explore wording and implement changes. I set the directio
 
 ## Progress and next steps
 
-The site builds successfully with Hugo, and the automated checks pass locally. A GitHub Pages workflow is in place; the new test step still needs verification on GitHub after these changes are pushed. Content is still evolving, and the accessibility features need further testing with real tasks and devices.
+The site builds successfully with Hugo, and the automated checks pass locally. The GitHub Pages workflow runs the checks before deployment, and the first release with the test suite passed on GitHub. Content is still evolving, and the accessibility features need further testing with real tasks and devices.
 
 Next, I’m developing the project summaries and gathering examples that show the decisions, tradeoffs and lessons behind the work.

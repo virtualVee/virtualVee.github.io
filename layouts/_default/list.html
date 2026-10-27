@@ -27,7 +27,8 @@
       <label class="project-control" for="project-sort">
         <span>Sort projects</span>
         <select id="project-sort" aria-controls="project-results" aria-describedby="project-sort-hint">
-          <option value="started-newest">Date started: newest first</option>
+          <option value="updated-newest">Last updated</option>
+          <option value="started-newest" selected>Date started: newest first</option>
           <option value="started-oldest">Date started: oldest first</option>
           <option value="finished-newest">Date finished: newest first</option>
           <option value="finished-oldest">Date finished: oldest first</option>
@@ -52,7 +53,7 @@
       "wide" }} {{ else if and (ge $index 5) (eq (mod (sub $index 5) 4) 0) }} {{
       $cardStyle = "compact" }} {{ end }}
 
-      <a class="project-card project-card--{{ $cardStyle }}" href="{{ $project.RelPermalink }}" data-project-type="{{ $project.Params.project_type | default "Other" | urlize }}" data-project-started="{{ with $project.Params.development_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-finished="{{ with $project.Params.finished_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-search="{{ $project.Title }} {{ $project.Description }} {{ $project.Params.category }} {{ with $project.Params.tools }}{{ delimit . " " }}{{ end }}">
+      <a class="project-card project-card--{{ $cardStyle }}" href="{{ $project.RelPermalink }}" data-project-type="{{ $project.Params.project_type | default "Other" | urlize }}" data-project-started="{{ with $project.Params.development_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-updated="{{ with $project.Params.updated_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-finished="{{ with $project.Params.finished_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-search="{{ $project.Title }} {{ $project.Description }} {{ $project.Params.category }} {{ with $project.Params.tools }}{{ delimit . " " }}{{ end }}">
         <div class="project-card-top">
           <span class="project-type">
             {{ $project.Params.category | default "Project category" }}

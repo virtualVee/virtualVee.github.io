@@ -21,7 +21,7 @@ function setup(records = [
   { name: "babsy", type: "apps", text: "Babsy baby routines Expo", start: "2026-09-24" },
 ]) {
   const cards = records.map(record => {
-    const card = element({ projectType: record.type, projectSearch: record.text, projectStarted: record.start || "", projectFinished: record.finish || "" });
+    const card = element({ projectType: record.type, projectSearch: record.text, projectUpdated: record.updated || "", projectStarted: record.start || "", projectFinished: record.finish || "" });
     card.name = record.name;
     card.number = element();
     card.querySelector = () => card.number;
@@ -111,4 +111,16 @@ test("reset clears search, type and date mode and restores projects", () => {
 });
 test("script safely ignores pages without project controls", () => {
   assert.doesNotThrow(() => vm.runInNewContext(source, {document:{querySelector:() => null}}));
+});
+
+test("latest updated uses update dates rather than start dates and keeps undated projects last", () => {
+  const ui = setup([
+    {name:"new-start",type:"apps",text:"New start",start:"2026-10-20",updated:"2026-10-21"},
+    {name:"recent-update",type:"websites",text:"Recent update",start:"2026-01-01",updated:"2026-10-27"},
+    {name:"no-update",type:"apps",text:"No update",start:"2026-10-25"},
+  ]);
+  ui.order("updated-newest");
+  assert.deepEqual(ui.shown(), ["recent-update", "new-start", "no-update"]);
+  ui.query("update"); ui.type("apps");
+  assert.deepEqual(ui.shown(), ["no-update"]);
 });

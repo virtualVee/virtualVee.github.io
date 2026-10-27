@@ -17,6 +17,7 @@
     card,
     index,
     text: normalize(card.dataset.projectSearch || ""),
+    updated: Date.parse(card.dataset.projectUpdated),
     started: Date.parse(card.dataset.projectStarted),
     finished: Date.parse(card.dataset.projectFinished),
   }));
@@ -35,7 +36,7 @@
     let visible = 0;
     ordered.forEach((entry, index) => {
       const { card, text } = entry;
-      card.hidden = !Number.isFinite(entry[dateField]) || (selectedType !== "all" && card.dataset.projectType !== selectedType)
+      card.hidden = (dateField !== "updated" && !Number.isFinite(entry[dateField])) || (selectedType !== "all" && card.dataset.projectType !== selectedType)
         || !terms.every((term) => text.includes(term));
       if (!card.hidden) visible += 1;
       // Reassign layout positions so sorting also updates the featured card.

@@ -6,7 +6,7 @@ Requirements: Hugo 0.167.0 extended (matching deployment), Node.js 22 or newer, 
 
 Run `npm ci` and `npx playwright install chromium` once, then `npm test` from the repository root. On Linux use `npx playwright install --with-deps chromium` to install browser system dependencies too.
 
-- `npm run test:projects`: 10 Node tests run the shipped project-controls script against synthetic projects using a minimal DOM adapter. Covers search normalization, combined filters, start/finish ordering, missing dates, empty states and Reset.
+- `npm run test:projects`: 11 Node tests run the shipped project-controls script against synthetic projects using a minimal DOM adapter. Covers search normalization, combined filters, start/finish ordering, missing dates, empty states and Reset.
 - `npm run test:site`: builds production output in scratch storage and checks links/assets/fragments, key metadata, drafts, CV asset/name and accessible controls. Scratch files are removed automatically.
 - `npm run test:browser`: Playwright runs 10 scenarios at three viewport sizes: phone 390×844, tablet 768×1024, desktop 1440×1000. Uses its own production build and temporary server on 127.0.0.1:4173; it does not reuse the personal preview on port 1313.
 - `npm run test:quick`: runs logic and generated-site checks without starting a browser.
@@ -27,3 +27,7 @@ Run `npm ci` and `npx playwright install chromium` once, then `npm test` from th
 GitHub Actions installs locked npm dependencies and Chromium, then runs `npm test` before building/uploading the deployable artifact. A failing check stops deployment. Browser reports and screenshots are uploaded for seven days, including on test failure. CI execution itself is verified after pushing, not by a local pass.
 
 These are Chromium viewport simulations, not physical-device or Safari/Firefox certification. Layout checks catch overflow and button geometry; screenshots are review artifacts, not pixel-baseline comparisons. They do not certify contrast, complete accessibility or screen-reader behaviour. Keep manual phone and keyboard reviews.
+
+## Updating project dates
+
+Use `development_date` for the recorded start milestone, `finished_date` only when complete, and `updated_date` for the latest substantive project progress (YYYY-MM-DD). “Last updated” sorts by `updated_date` descending, leaving projects with no recorded update last. Start and finish sorts remain independent. Changing a portfolio summary alone need not imply a new development milestone in the underlying project.

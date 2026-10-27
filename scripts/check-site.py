@@ -99,7 +99,7 @@ def audit(site):
         for control_id in ("project-search", "project-sort"):
             require(bool(projects.find("label", **{"for": control_id})), "Projects: missing label for " + control_id)
         options = {a.get("value") for a in projects.find("option")}
-        require({"started-newest", "started-oldest", "finished-newest", "finished-oldest"}.issubset(options), "Projects: missing date sort options")
+        require({"started-newest", "started-oldest", "finished-newest", "finished-oldest", "updated-newest"}.issubset(options), "Projects: missing date sort options")
         require(any(a.get("role") == "status" for _, a in projects.elements), "Projects: missing live result count")
     for source in (ROOT / "content/projects").glob("*/index.md"):
         if re.search(r"^draft:\s*true\s*$", source.read_text(), re.M):
