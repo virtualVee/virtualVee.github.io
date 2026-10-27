@@ -1,0 +1,17 @@
+{
+  "name": "vanessa-correia-portfolio",
+  "private": true,
+  "scripts": {
+    "test": "npm run test:projects && npm run test:site && npm run test:browser",
+    "test:projects": "node --test tests/*.test.cjs",
+    "test:site": "python3 scripts/check-site.py",
+    "test:browser": "playwright test",
+    "test:quick": "npm run test:projects && npm run test:site"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

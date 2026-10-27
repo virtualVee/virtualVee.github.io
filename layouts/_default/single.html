@@ -30,12 +30,17 @@
         <dt>Status</dt>
         <dd>{{ . }}</dd>
       </div>
-      {{ end }} {{ with .Params.year }}
+      {{ end }} {{ with .Params.development_date }}
+      <div class="project-meta-item">
+        <dt>In development since</dt>
+        <dd><time datetime="{{ time.Format "2006-01" . }}">{{ time.Format "January 2006" . }}</time></dd>
+      </div>
+      {{ else }} {{ with .Params.year }}
       <div class="project-meta-item">
         <dt>Year</dt>
         <dd>{{ . }}</dd>
       </div>
-      {{ end }}
+      {{ end }} {{ end }}
     </dl>
     {{ end }} {{ if or .Params.github .Params.demo .Params.documentation }}
     <nav class="project-actions" aria-label="Project resources">

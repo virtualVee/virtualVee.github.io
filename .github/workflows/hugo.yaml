@@ -39,6 +39,36 @@ jobs:
             -C "${RUNNER_TEMP}/hugo" hugo
           echo "${RUNNER_TEMP}/hugo" >> "$GITHUB_PATH"
 
+      - name: Set up Node.js for tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Set up Python for site checks
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependencies
+        run: npm ci
+
+      - name: Install browser for regression checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Run regression, site and browser checks
+        run: npm test
+
+      - name: Upload browser report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Build site
         run: hugo --gc --minify
 

@@ -583,6 +583,15 @@ h3 {
 ======================================== */
 
 @media (max-width: 640px) {
+  .about-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .about-actions .button {
+    text-align: center;
+  }
+
   .container {
     width: min(100% - 32px, 1080px);
   }
@@ -806,4 +815,117 @@ h3 {
   .project-actions a {
     width: 100%;
   }
+}
+
+.project-date {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* Project type filters */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.project-filters .button {
+  font: inherit;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.project-filters .button[aria-pressed="true"] {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.project-filter-status {
+  margin: 16px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.project-filter-status + .project-grid {
+  margin-top: 24px;
+}
+
+.project-grid [hidden],
+.project-filters[hidden],
+.project-filter-status[hidden] {
+  display: none;
+}
+
+.project-grid[data-filtered="true"] .project-card {
+  grid-column: 1 / -1;
+}
+
+.project-search-sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.project-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+
+.project-control:first-child {
+  flex: 1 1 240px;
+}
+
+.project-control input,
+.project-control select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.project-search-sort .button {
+  font: inherit;
+  cursor: pointer;
+  min-height: 46px;
+}
+
+.project-search-sort[hidden],
+.project-empty[hidden] {
+  display: none;
+}
+
+.project-empty {
+  color: var(--color-text-muted);
+  padding-block: 24px;
+}
+
+@media (max-width: 640px) {
+  .project-search-sort {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .project-control:first-child {
+    flex: none;
+  }
+}
+
+.project-sort-hint {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
 }

@@ -1,5 +1,6 @@
 ---
 title: "Babsy"
+project_type: "Apps"
 weight: 2
 date: 2026-10-27
 draft: false
@@ -9,6 +10,7 @@ role: "Requirements, interaction design and development"
 tools: [React Native, Expo, TypeScript, AsyncStorage]
 status: "In development"
 year: 2026
+development_date: 2026-09-24
 ---
 
 ## The idea
