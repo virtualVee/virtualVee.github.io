@@ -1,4 +1,14 @@
 const { test, expect } = require("@playwright/test");
+
+// Contact requests and challenges are simulated; tests never send real messages.
+test.beforeEach(async ({page}) => {
+  await page.route("https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit", route => route.fulfill({contentType:"text/javascript",body:`
+    window.turnstile = {
+      render: (element, options) => { window.completeChallenge = () => options.callback('test-token'); setTimeout(window.completeChallenge, 0); return 'test-widget'; },
+      reset: () => setTimeout(window.completeChallenge, 0)
+    };
+  `}));
+});
 const pages = ["/", "/about/", "/projects/", "/projects/portfolio/", "/projects/babsy/"];
 
 for (const route of pages) {
@@ -81,7 +91,7 @@ test("contact form validates fields, protects contact details and submits to the
   await page.getByLabel("Message",{exact:true}).fill("A browser test message with no external delivery.");
   await submit.click();
   expect(sent).toBeUndefined();
-  await page.getByLabel("Email",{exact:true}).fill("test@example.com");
+  await page.getByLabel("Email",{exact:true}).fill("visitor+portfolio@gmail.com");
   await submit.click();
   await expect(page.getByRole("button",{name:"Sending…",exact:true})).toBeDisabled();
   if (process.env.PORTFOLIO_RECORD_CONTACT) await page.waitForTimeout(700);
@@ -91,9 +101,11 @@ test("contact form validates fields, protects contact details and submits to the
   await expect(page.locator("#contact-feedback")).toBeFocused();
   await expect(page.locator("#contact-feedback")).toBeInViewport();
   await expect(page.getByLabel("Message",{exact:true})).toHaveValue("");
+  await expect(page.locator("#contact-message-count")).toHaveText("0/5000");
   expect(new URL(page.url()).pathname).toBe("/about/");
+  expect(sent.get("_gotcha")).toBe("");
   expect(sent.get("name")).toBe("Browser test");
-  expect(sent.get("email")).toBe("test@example.com");
+  expect(sent.get("email")).toBe("visitor+portfolio@gmail.com");
   expect(sent.get("message")).toContain("no external delivery");
   await page.locator("#contact-feedback").evaluate(el => Promise.all(el.getAnimations().map(animation => animation.finished)));
   if (process.env.PORTFOLIO_RECORD_CONTACT) await page.waitForTimeout(1800);
@@ -155,7 +167,7 @@ test("contact submission failures preserve fields and allow retry without leavin
     return route.fulfill({contentType:"application/json",body:JSON.stringify({ok:true})});
   });
   await page.getByLabel("Name",{exact:true}).fill("Browser test");
-  await page.getByLabel("Email",{exact:true}).fill("test@example.com");
+  await page.getByLabel("Email",{exact:true}).fill("visitor+portfolio@gmail.com");
   const message = "Retain this message when delivery cannot be confirmed.";
   await page.getByLabel("Message",{exact:true}).fill(message);
   for (let failure=0;failure<2;failure++) {
@@ -164,7 +176,7 @@ test("contact submission failures preserve fields and allow retry without leavin
     await expect(page.getByRole("button",{name:"Send",exact:true})).toBeEnabled();
     await expect(page.getByLabel("Message",{exact:true})).toHaveValue(message);
     await expect(page.getByLabel("Name",{exact:true})).toHaveValue("Browser test");
-    await expect(page.getByLabel("Email",{exact:true})).toHaveValue("test@example.com");
+    await expect(page.getByLabel("Email",{exact:true})).toHaveValue("visitor+portfolio@gmail.com");
     expect(new URL(page.url()).pathname).toBe("/about/");
   }
   await page.getByRole("button",{name:"Send",exact:true}).click();
@@ -179,9 +191,84 @@ test.describe("native contact form fallback", () => {
     const endpoint = await page.locator(".contact-form").getAttribute("action");
     await page.route(endpoint, route => route.fulfill({contentType:"text/html",body:"<h1>Native form submitted</h1>"}));
     await page.getByLabel("Name",{exact:true}).fill("Browser test");
-    await page.getByLabel("Email",{exact:true}).fill("test@example.com");
+    await page.getByLabel("Email",{exact:true}).fill("visitor+portfolio@gmail.com");
     await page.getByLabel("Message",{exact:true}).fill("Native fallback test; no external delivery.");
     await page.getByRole("button",{name:"Send",exact:true}).click();
     await expect(page.getByRole("heading",{name:"Native form submitted",exact:true})).toBeVisible();
   });
+});
+
+
+test("contact rejects placeholders and blank content, allows corrections and traps bots", async ({page}) => {
+  await page.goto("/about/");
+  const form = page.locator(".contact-form");
+  await expect(form).toHaveAttribute("data-contact-mode", "inline");
+  let posts = 0;
+  let sent;
+  await page.route(await form.getAttribute("action"), route => {
+    posts++;
+    sent = new URLSearchParams(route.request().postData());
+    return route.fulfill({contentType:"application/json",body:JSON.stringify({ok:true})});
+  });
+  const name = page.getByLabel("Name",{exact:true});
+  const email = page.getByLabel("Email",{exact:true});
+  const message = page.getByLabel("Message",{exact:true});
+  const submit = page.getByRole("button",{name:"Send",exact:true});
+  await name.fill("Visitor");
+  await email.fill("visitor+portfolio@gmail.com");
+  await message.fill("Too short");
+  await expect(page.locator("#contact-message-hint")).toHaveCount(0);
+  await submit.click();
+  expect(await message.evaluate(el => el.validationMessage)).toBe("Please enter at least 10 characters.");
+  expect(posts).toBe(0);
+  await message.fill("A useful portfolio question.");
+  for (const address of ["test@example.com", "TEST@TEST.COM", "hello@sub.example.org", "hello@sample.test"]) {
+    await email.fill(address);
+    await submit.click();
+    expect(await email.evaluate(el => el.validationMessage)).toContain("where I can reply");
+    expect(posts).toBe(0);
+  }
+  await email.fill("visitor+portfolio@gmail.com");
+  await name.fill("   ");
+  await submit.click();
+  expect(await name.evaluate(el => el.validationMessage)).toContain("enter your name");
+  await name.fill("  Visitor  ");
+  await message.fill("          ");
+  await submit.click();
+  expect(await message.evaluate(el => el.validationMessage)).toContain("at least 10");
+  expect(posts).toBe(0);
+  await message.fill("  A useful portfolio question.  ");
+  const trap = page.locator('[name="_gotcha"]');
+  await expect(trap).toBeHidden();
+  await expect(trap).toHaveAttribute("tabindex","-1");
+  await trap.evaluate(el => el.value = "spam");
+  await submit.click();
+  expect(posts).toBe(0);
+  await expect(page.locator("#contact-feedback")).toBeHidden();
+  await trap.evaluate(el => el.value = "");
+  await submit.click();
+  await expect(page.locator("#contact-feedback")).toHaveAttribute("data-state","success");
+  expect(posts).toBe(1);
+  expect(sent.get("name")).toBe("Visitor");
+  expect(sent.get("message")).toBe("A useful portfolio question.");
+});
+
+
+test("message counter follows typing, deletion, maximum length and reset", async ({page}) => {
+  await page.goto("/about/");
+  const message = page.getByLabel("Message",{exact:true});
+  const counter = page.locator("#contact-message-count");
+  await expect(counter).toHaveText("0/5000");
+  await expect(message).toHaveAttribute("aria-describedby","contact-message-count");
+  await message.fill("Hello there!");
+  await expect(counter).toHaveText("12/5000");
+  await message.press("Backspace");
+  await expect(counter).toHaveText("11/5000");
+  await message.fill("a".repeat(5000));
+  await message.press("End");
+  await message.press("b");
+  await expect(message).toHaveValue("a".repeat(5000));
+  await expect(counter).toHaveText("5000/5000");
+  await page.locator(".contact-form").evaluate(form => form.reset());
+  await expect(counter).toHaveText("0/5000");
 });

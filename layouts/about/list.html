@@ -27,8 +27,21 @@
             <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required>
           </label>
           <label class="contact-field" for="contact-message">Message
-            <textarea id="contact-message" name="message" rows="6" minlength="10" maxlength="5000" required></textarea>
+            <textarea id="contact-message" name="message" rows="6" minlength="10" maxlength="5000" aria-describedby="contact-message-count" required></textarea>
           </label>
+          <div class="contact-message-details">
+            <span id="contact-message-count" hidden></span>
+          </div>
+          <div class="contact-honeypot" aria-hidden="true">
+            <label for="contact-website">Leave this field empty</label>
+            <input id="contact-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          {{ if .Site.Params.contact_turnstile_enabled }}
+          {{ if not .Site.Params.contact_turnstile_site_key }}{{ errorf "Turnstile requires a public site key" }}{{ end }}
+          <div id="contact-turnstile" data-sitekey="{{ .Site.Params.contact_turnstile_site_key }}"></div>
+          <p id="contact-security-status" class="contact-note" role="status">Loading security check…</p>
+          <noscript><p>JavaScript is required for the security check. Please enable it or contact me on LinkedIn.</p></noscript>
+          {{ end }}
           <button class="button" type="submit">Send</button>
         </fieldset>
         <div class="contact-feedback" id="contact-feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>

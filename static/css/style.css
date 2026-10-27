@@ -976,3 +976,22 @@ h3 {
 .contribution-item { padding-block: 28px; border-top: 1px solid var(--color-border); overflow-wrap: anywhere; }
 .contribution-detail { max-width: 900px; }
 @media (max-width: 640px) { .contribution-grid { grid-template-columns: 1fr; } }
+
+/* Formspree honeypot: excluded from layout, keyboard and assistive navigation. */
+.contact-honeypot {
+  display: none;
+}
+
+.contact-message-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 16px;
+  margin: -12px 0 20px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+#contact-message-count {
+  font-variant-numeric: tabular-nums;
+}

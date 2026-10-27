@@ -4,6 +4,8 @@ title = 'Vanessa Correia'
 
 [params]
 # Add the form endpoint from your Formspree dashboard; never put an email address here.
+contact_turnstile_enabled = true
+contact_turnstile_site_key = "0x4AAAAAAFolepnkS6AG8Zxa"
 contact_form_endpoint = "https://formspree.io/f/xqpppndd"
 description = "Vanessa Correia’s portfolio: healthcare technology, technical analysis, process improvement and practical problem-solving."
 
