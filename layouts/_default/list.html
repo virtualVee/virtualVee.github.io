@@ -9,9 +9,10 @@
       problem-solving, with a look at the thinking behind the work.
     </p>
 
-    {{ $projects := .RegularPagesRecursive }}
+    {{ $projects := sort (where .RegularPagesRecursive "Draft" false) "Params.updated_date" "desc" }}
     {{ $projectCount := len $projects }}
 
+    {{ if ge $projectCount 5 }}
     {{ $types := slice }}
     {{ range $projects }}
       {{ $types = $types | append (.Params.project_type | default "Other") }}
@@ -42,8 +43,10 @@
     </div>
     <p class="project-filter-status" data-project-filter-status role="status" aria-live="polite" aria-atomic="true" hidden></p>
 
+    {{ end }}
+
     <div class="project-grid" id="project-results">
-      {{ range $index, $project := .RegularPagesRecursive }}
+      {{ range $index, $project := $projects }}
       <a class="project-card" href="{{ $project.RelPermalink }}" data-project-status="{{ $project.Params.status }}" data-project-type="{{ $project.Params.project_type | default "Other" | urlize }}" data-project-started="{{ with $project.Params.development_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-updated="{{ with $project.Params.updated_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-finished="{{ with $project.Params.finished_date }}{{ time.Format "2006-01-02" . }}{{ end }}" data-project-search="{{ $project.Title }} {{ $project.Description }} {{ $project.Params.category }} {{ with $project.Params.tools }}{{ delimit . " " }}{{ end }}">
         <div class="project-card-top">
           <span class="project-type">
@@ -85,9 +88,13 @@
         <p>Watch this space!</p>
       </article>
     </div>
+    {{ if ge $projectCount 5 }}
     <p class="project-empty" data-project-empty hidden>No projects match your search and filters. Try another term or reset the controls.</p>
+    {{ end }}
   </section>
   {{ partial "contributions/preview.html" . }}
 </div>
+{{ if ge (len (where .RegularPagesRecursive "Draft" false)) 5 }}
 <script src="{{ "js/project-filters.js" | relURL }}?v={{ readFile "static/js/project-filters.js" | md5 }}" defer></script>
+{{ end }}
 {{ end }}

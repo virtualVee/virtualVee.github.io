@@ -1,22 +1,8 @@
 const {test,expect} = require('@playwright/test');
-const http = require('node:http');
-const fs = require('node:fs');
-const path = require('node:path');
-const {fixture} = require('../helpers/contribution-fixture.cjs');
-let f,server,url;
-test.beforeAll(async()=>{
-  f=fixture(7);
-  server=http.createServer((req,res)=>{
-    let file=path.join(f.output,new URL(req.url,'http://localhost').pathname);
-    if (fs.existsSync(file)&&fs.statSync(file).isDirectory()) file=path.join(file,'index.html');
-    if (!fs.existsSync(file)) return res.writeHead(404).end();
-    res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.woff2')?'font/woff2':'text/html');
-    fs.createReadStream(file).pipe(res);
-  });
-  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  url=`http://127.0.0.1:${server.address().port}`;
-});
-test.afterAll(async()=>{if(server) await new Promise(resolve=>server.close(resolve));if(f)f.clean();});
+const {serveFixture} = require('../helpers/contribution-fixture.cjs');
+let f,url;
+test.beforeAll(async()=>{f=await serveFixture(7,{projectCount:5});url=f.url;});
+test.afterAll(async()=>{if(f)await f.close();});
 for(const theme of ['light','dark']) {
   test(`contribution history, controls and layout in ${theme} theme`,async({page})=>{
     await page.addInitScript(value=>localStorage.setItem('theme',value),theme);

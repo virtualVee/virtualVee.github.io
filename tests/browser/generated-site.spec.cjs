@@ -78,16 +78,22 @@ function audit(pages) {
   const projects = pages.get(path.join(site,"projects/index.html"))?.facts;
   if (projects) {
     require(projects.elements.some(e => "data-project-placeholder" in e.attrs), "Projects: missing empty-view placeholder");
-    require(projects.elements.some(e => "data-project-filters" in e.attrs && "hidden" in e.attrs), "Projects: filters must be hidden until JS is ready");
-    for (const id of ["project-search","project-sort"]) require(find(projects,"label",{for:id}).length > 0, `Projects: missing label for ${id}`);
+    const cardCount = find(projects,"a").filter(a => "data-project-type" in a).length;
+    if (cardCount >= 5) {
+      require(projects.elements.some(e => "data-project-filters" in e.attrs && "hidden" in e.attrs), "Projects: filters must be hidden until JS is ready");
+      for (const id of ["project-search","project-sort"]) require(find(projects,"label",{for:id}).length > 0, `Projects: missing label for ${id}`);
+      require(find(projects,"option").some(a => a.value === "updated-newest" && "selected" in a), "Projects: Last updated must be the default sort");
+      const options = new Set(find(projects,"option").map(a => a.value));
+      require(["started-newest","started-oldest","finished-newest","finished-oldest","updated-newest"].every(value => options.has(value)), "Projects: missing date sort options");
+      require(projects.elements.some(e => e.attrs.role === "status"), "Projects: missing live result count");
+    } else {
+      require(!projects.elements.some(e => ["project-search","project-sort"].includes(e.attrs.id) || "data-project-filters" in e.attrs), "Projects: lookup controls exposed below five published projects");
+    }
     for (const attrs of find(projects,"a").filter(a => "data-project-type" in a)) {
       require(Boolean(attrs["data-project-status"]?.trim()), `${attrs.href}: missing project status`);
       for (const field of ["started","updated"]) require(validDate(attrs["data-project-"+field]), `${attrs.href}: missing/invalid ${field} date`);
     }
-    require(find(projects,"option").some(a => a.value === "updated-newest" && "selected" in a), "Projects: Last updated must be the default sort");
-    const options = new Set(find(projects,"option").map(a => a.value));
-    require(["started-newest","started-oldest","finished-newest","finished-oldest","updated-newest"].every(value => options.has(value)), "Projects: missing date sort options");
-    require(projects.elements.some(e => e.attrs.role === "status"), "Projects: missing live result count");
+
   }
   for (const entry of fs.readdirSync(path.join(root,"content/projects"),{withFileTypes:true}).filter(e => e.isDirectory())) {
     const source = path.join(root,"content/projects",entry.name,"index.md");

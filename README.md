@@ -4,17 +4,21 @@ My portfolio brings together projects exploring technology, process improvement 
 
 Visit [vanessacorreia.com](https://vanessacorreia.com).
 
-## Features
+## Current features
 
-Listed from oldest to newest:
+Listed from newest to oldest:
 
-- **Site foundation:** Home, About and Projects pages, responsive project cards and light/dark themes.
-- **Typography and navigation:** local fonts, keyboard skip navigation, visible focus and reduced-motion support.
-- **Project context:** case-study metadata, resource links, code presentation and page descriptions.
-- **Project discovery:** search, type filters and date sorting, with concise cards and detailed project pages.
-- **Automated testing:** checks for project controls, generated pages and browser behaviour across phone, tablet and desktop layouts in both themes.
+- **Project listing:** concise cards ordered by last updated, with detailed pages for each project.
 - **Contact:** a form with validation, submission feedback and retry support.
-- **Open source history:** repository-grouped contributions with dates, statuses and pull-request links. This section appears only when contributions have been recorded; a manual checker prepares new records for review.
+- **Automated testing:** checks for generated pages, project behaviour and responsive layouts in both themes.
+- **Project context:** case-study metadata, resource links, code presentation and page descriptions.
+- **Typography and navigation:** local fonts, keyboard skip navigation, visible focus and reduced-motion support.
+- **Site foundation:** Home, About and Projects pages, responsive layouts and light/dark themes.
+
+## Implemented, currently hidden
+
+- **Open source contributions:** repository-grouped history with dates, statuses and pull-request links. It appears once real contributions are recorded; a manual checker prepares records for review.
+- **Project search, filters and sorting:** appear automatically when at least five projects are published. Smaller collections stay ordered by last updated without additional controls.
 
 ## Built with
 
