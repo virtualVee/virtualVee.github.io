@@ -1011,3 +1011,67 @@ h3 {
   color: var(--color-text-muted);
   font-size: 0.9rem;
 }
+
+.contact-feedback {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 3px;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.contact-feedback[data-state="error"] {
+  border-left-color: var(--color-text);
+}
+
+.contact-feedback[hidden] {
+  display: none;
+}
+
+.contact-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+}
+
+.contact-feedback-icon {
+  display: inline-flex;
+  flex: 0 0 40px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.contact-feedback-title {
+  display: block;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.contact-feedback p {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+}
+
+.contact-feedback[data-state="success"] {
+  border: 2px solid var(--color-accent);
+  animation: contact-feedback-enter 380ms ease-out both;
+}
+
+@keyframes contact-feedback-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-feedback { animation: none !important; }
+}

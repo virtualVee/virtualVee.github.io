@@ -42,7 +42,7 @@ test("About buttons stack on phones and align in a row on wider screens", async 
   }
 });
 
-test("contact form validates fields, protects contact details and submits to the configured endpoint", async ({page,request}) => {
+test("contact form validates fields, protects contact details and submits to the configured endpoint", async ({page,request}, testInfo) => {
   await page.goto("/about/");
   await expect(page.getByRole("link",{name:"Download my CV",exact:true})).toHaveCount(0);
   await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
@@ -50,12 +50,16 @@ test("contact form validates fields, protects contact details and submits to the
   await page.locator("#contact").scrollIntoViewIfNeeded();
   await expect(page.getByRole("heading",{name:"Get in touch",exact:true})).toBeInViewport();
   const form = page.locator(".contact-form");
+  await expect(form).toHaveAttribute("data-contact-mode", "inline");
   const endpoint = await form.getAttribute("action");
   expect(endpoint).toMatch(/^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/);
   let sent;
-  await page.route(endpoint, route => {
+  let release;
+  const responseGate = new Promise(resolve => { release = resolve; });
+  await page.route(endpoint, async route => {
     sent = new URLSearchParams(route.request().postData());
-    return route.fulfill({contentType:"text/html",body:"<h1>Test submission accepted</h1>"});
+    await responseGate;
+    return route.fulfill({contentType:"application/json",body:JSON.stringify({ok:true})});
   });
   const submit = page.getByRole("button",{name:"Send",exact:true});
   await expect(submit).toBeEnabled();
@@ -68,10 +72,23 @@ test("contact form validates fields, protects contact details and submits to the
   expect(sent).toBeUndefined();
   await page.getByLabel("Email",{exact:true}).fill("test@example.com");
   await submit.click();
-  await expect(page.getByRole("heading",{name:"Test submission accepted",exact:true})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Sending…",exact:true})).toBeDisabled();
+  if (process.env.PORTFOLIO_RECORD_CONTACT) await page.waitForTimeout(700);
+  release();
+  await expect(page.locator("#contact-feedback")).toContainText("Thanks—your message has been submitted.");
+  await expect(page.locator("#contact-feedback")).toContainText("Message submitted");
+  await expect(page.locator("#contact-feedback")).toBeFocused();
+  await expect(page.locator("#contact-feedback")).toBeInViewport();
+  await expect(page.getByLabel("Message",{exact:true})).toHaveValue("");
+  expect(new URL(page.url()).pathname).toBe("/about/");
   expect(sent.get("name")).toBe("Browser test");
   expect(sent.get("email")).toBe("test@example.com");
   expect(sent.get("message")).toContain("no external delivery");
+  await page.locator("#contact-feedback").evaluate(el => Promise.all(el.getAnimations().map(animation => animation.finished)));
+  if (process.env.PORTFOLIO_RECORD_CONTACT) await page.waitForTimeout(1800);
+  const screenshot = testInfo.outputPath("inline-confirmation.png");
+  await page.screenshot({path:screenshot,fullPage:true,animations:"disabled"});
+  await testInfo.attach("Inline confirmation (intercepted submission)",{path:screenshot,contentType:"image/png"});
 });
 
 test("About and footer external links open separate tabs", async ({page,context}) => {
@@ -131,4 +148,46 @@ test("keyboard skip link moves focus into the content", async ({page}) => {
   await expect(skip).toBeVisible();
   await page.keyboard.press("Enter");
   await expect(page.locator("#main-content")).toBeFocused();
+});
+
+test("contact submission failures preserve fields and allow retry without leaving About", async ({page}) => {
+  await page.goto("/about/");
+  const endpoint = await page.locator(".contact-form").getAttribute("action");
+  let attempt = 0;
+  await page.route(endpoint, route => {
+    attempt += 1;
+    if (attempt === 1) return route.fulfill({status:500,contentType:"application/json",body:JSON.stringify({errors:[{message:"Test failure"}]})});
+    if (attempt === 2) return route.abort("failed");
+    return route.fulfill({contentType:"application/json",body:JSON.stringify({ok:true})});
+  });
+  await page.getByLabel("Name",{exact:true}).fill("Browser test");
+  await page.getByLabel("Email",{exact:true}).fill("test@example.com");
+  const message = "Retain this message when delivery cannot be confirmed.";
+  await page.getByLabel("Message",{exact:true}).fill(message);
+  for (let failure=0;failure<2;failure++) {
+    await page.getByRole("button",{name:"Send",exact:true}).click();
+    await expect(page.locator("#contact-feedback")).toHaveAttribute("data-state","error");
+    await expect(page.getByRole("button",{name:"Send",exact:true})).toBeEnabled();
+    await expect(page.getByLabel("Message",{exact:true})).toHaveValue(message);
+    await expect(page.getByLabel("Name",{exact:true})).toHaveValue("Browser test");
+    await expect(page.getByLabel("Email",{exact:true})).toHaveValue("test@example.com");
+    expect(new URL(page.url()).pathname).toBe("/about/");
+  }
+  await page.getByRole("button",{name:"Send",exact:true}).click();
+  await expect(page.locator("#contact-feedback")).toHaveAttribute("data-state","success");
+  expect(attempt).toBe(3);
+});
+
+test.describe("native contact form fallback", () => {
+  test.use({javaScriptEnabled:false});
+  test("form still submits without JavaScript", async ({page}) => {
+    await page.goto("/about/");
+    const endpoint = await page.locator(".contact-form").getAttribute("action");
+    await page.route(endpoint, route => route.fulfill({contentType:"text/html",body:"<h1>Native form submitted</h1>"}));
+    await page.getByLabel("Name",{exact:true}).fill("Browser test");
+    await page.getByLabel("Email",{exact:true}).fill("test@example.com");
+    await page.getByLabel("Message",{exact:true}).fill("Native fallback test; no external delivery.");
+    await page.getByRole("button",{name:"Send",exact:true}).click();
+    await expect(page.getByRole("heading",{name:"Native form submitted",exact:true})).toBeVisible();
+  });
 });

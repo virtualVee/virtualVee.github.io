@@ -7,9 +7,10 @@ module.exports = defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
-    baseURL: "http://127.0.0.1:4173",
+    baseURL: process.env.PORTFOLIO_PREVIEW_URL || "http://127.0.0.1:4173",
     browserName: "chromium",
     trace: "retain-on-failure",
+    video: process.env.PORTFOLIO_RECORD_CONTACT ? "on" : "off",
     screenshot: "only-on-failure",
   },
   projects: [
@@ -17,7 +18,7 @@ module.exports = defineConfig({
     { name: "tablet", use: { viewport: {width:768,height:1024}, hasTouch:true } },
     { name: "desktop", use: { viewport: {width:1440,height:1000} } },
   ],
-  webServer: {
+  webServer: process.env.PORTFOLIO_PREVIEW_URL ? undefined : {
     command: "node scripts/serve-test-site.cjs",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: false,

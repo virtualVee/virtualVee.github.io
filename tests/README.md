@@ -8,7 +8,7 @@ Run `npm ci` and `npx playwright install chromium` once, then `npm test` from th
 
 - `npm run test:projects`: 12 Node tests run the shipped project-controls script against synthetic projects using a minimal DOM adapter. Covers search normalization, combined filters, start/finish ordering, missing dates, empty states and Reset.
 - `npm run test:site`: builds production output in scratch storage and checks links/assets/fragments, key metadata, drafts, contact privacy and accessible controls. Scratch files are removed automatically.
-- `npm run test:browser`: Playwright runs 10 scenarios at three viewport sizes: phone 390×844, tablet 768×1024, desktop 1440×1000. Uses its own production build and temporary server on 127.0.0.1:4173; it does not reuse the personal preview on port 1313.
+- `npm run test:browser`: Playwright runs 12 scenarios at three viewport sizes: phone 390×844, tablet 768×1024, desktop 1440×1000. Uses its own production build and temporary server on 127.0.0.1:4173; it does not reuse the personal preview on port 1313.
 - `npm run test:quick`: runs logic and generated-site checks without starting a browser.
 - `python3 scripts/check-site.py --site public`: checks an existing production build.
 - `npx playwright show-report`: opens the latest browser report, including light/dark screenshots and failure traces. Reports live in ignored `playwright-report/` and `test-results/` directories.
@@ -17,7 +17,7 @@ Run `npm ci` and `npx playwright install chromium` once, then `npm test` from th
 
 - Each of Home, About, Projects and both project details loads without JavaScript errors, fits the viewport, and exposes the main heading/navigation in light and dark themes. Full-page screenshots are attached for review, with CSS animations finished for consistent capture.
 - GitHub and LinkedIn About buttons stack at phone width and align in a row on wider screens, with at least 44px button heights.
-- The CV download, public PDF asset and direct mailto link are absent. Required fields and invalid-email validation prevent submission; a valid submission posts to the configured Formspree endpoint. Automated browser tests intercept the request and never deliver email.
+- The CV download, public PDF asset and direct mailto link are absent. Required fields and invalid-email validation prevent submission; a valid submission posts to the configured Formspree endpoint and shows an in-page confirmation without navigation. Sending disables the form; server/network failures preserve values for retry, and the native form remains usable without JavaScript. Automated browser tests intercept the request and never deliver email.
 - LinkedIn/GitHub About links and both footer links produce separate tabs and have safe new-tab attributes. External destinations are intercepted inside the tests: these checks verify browser behaviour, not third-party uptime.
 - Search, type filters, start-date sorting, finish-date empty view and Reset work together through real browser input.
 - Keyboard skip link receives focus and moves it into main content.
@@ -33,3 +33,7 @@ These are Chromium viewport simulations, not physical-device or Safari/Firefox c
 Use `development_date` for the recorded start milestone, `finished_date` only when complete, and `updated_date` for the latest substantive project progress (YYYY-MM-DD). “Last updated” sorts by `updated_date` descending, leaving projects with no recorded update last. Start and finish sorts remain independent. Changing a portfolio summary alone need not imply a new development milestone in the underlying project.
 
 Project-content conventions and the new-project command are documented in `docs/project-content.md`. The generated-site audit requires status/start/update metadata on published cards; the archetype test verifies future drafts include optional release fields without inventing a completion date.
+
+To diagnose the actual running preview instead of the scratch build, set `PORTFOLIO_PREVIEW_URL` to its local origin when running browser tests. For example: `PORTFOLIO_PREVIEW_URL=http://192.168.1.204:1313 npm run test:browser -- --grep "contact form validates"`. The contact request is still intercepted; no real messages are sent. This test also asserts that the inline handler started and records a success-state screenshot.
+
+To record the contact interaction for review: `PORTFOLIO_RECORD_CONTACT=1 npm run test:browser -- --grep "contact form validates" --project phone --project desktop`. The recording run holds the mocked response briefly and pauses on the success panel; no live email is sent. Videos are saved in test-results/ and attached to the browser report.

@@ -31,9 +31,11 @@
           </label>
           <button class="button" type="submit">Send</button>
         </fieldset>
+        <div class="contact-feedback" id="contact-feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
         <p class="contact-note">Messages are processed by <a href="https://formspree.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Formspree</a> and used to respond to your enquiry.</p>
       </form>
     </section>
   </section>
 </div>
+<script src="{{ "js/contact-form.js" | relURL }}?v={{ readFile "static/js/contact-form.js" | md5 }}" defer></script>
 {{ end }}
