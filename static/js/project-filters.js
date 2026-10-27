@@ -39,13 +39,6 @@
       card.hidden = (dateField !== "updated" && !Number.isFinite(entry[dateField])) || (selectedType !== "all" && card.dataset.projectType !== selectedType)
         || !terms.every((term) => text.includes(term));
       if (!card.hidden) visible += 1;
-      // Reassign layout positions so sorting also updates the featured card.
-      card.classList.remove("project-card--featured", "project-card--compact", "project-card--wide", "project-card--standard");
-      const style = index === 0 ? "featured"
-        : index === 1 || index === 2 ? "compact"
-        : (index - 3) % 4 === 0 ? "wide"
-        : index >= 5 && (index - 5) % 4 === 0 ? "compact" : "standard";
-      card.classList.add(`project-card--${style}`);
       const number = card.querySelector(".project-number");
       if (number) number.textContent = String(index + 1).padStart(2, "0");
       grid.append(card);
