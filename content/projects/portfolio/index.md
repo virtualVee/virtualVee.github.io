@@ -7,7 +7,7 @@ draft: false
 category: "Web design & documentation"
 description: "A Hugo portfolio combining clear content, responsive design and automated testing."
 role: "Content, structure and implementation"
-tools: [Hugo, Markdown, CSS, JavaScript, Node.js, Python, Playwright, GitHub Pages]
+tools: [Hugo, Markdown, CSS, JavaScript, Node.js, Playwright, GitHub Pages]
 status: "Live · Actively maintained"
 year: 2026
 finished_date: 2026-10-27
@@ -34,6 +34,8 @@ Each project starts with a short overview, key contributions and next steps, so 
 ## Checking changes
 
 I’ve added automated regression tests for project search, combined filters, date sorting, empty states and Reset. A separate check builds the site and inspects internal links, assets, page metadata and the contact-form setup. Browser tests also check that the CV and direct email link are removed, links open in new tabs, and responsive layouts at phone, tablet and desktop widths in both themes.
+
+Node.js’s built-in runner keeps logic tests lightweight. I chose Playwright for real-browser interactions, responsive layouts and submission feedback. An initial Python checker used its built-in HTML parser; I later moved those checks into Playwright to keep one language and reuse existing tooling, without another parsing package. Page checks now need a browser—a reasonable tradeoff for this small site.
 
 The checks run locally with one command and are configured to run in GitHub Actions before deployment. They complement manual phone, keyboard and theme checks; they do not replace a full accessibility review.
 

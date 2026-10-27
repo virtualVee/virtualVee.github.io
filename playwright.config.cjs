@@ -14,9 +14,10 @@ module.exports = defineConfig({
     screenshot: "only-on-failure",
   },
   projects: [
-    { name: "phone", use: { viewport: {width:390,height:844}, isMobile:true, hasTouch:true } },
-    { name: "tablet", use: { viewport: {width:768,height:1024}, hasTouch:true } },
-    { name: "desktop", use: { viewport: {width:1440,height:1000} } },
+    { name: "site-checks", testMatch: "**/generated-site.spec.cjs", use: {javaScriptEnabled:false} },
+    { name: "phone", testIgnore: "**/generated-site.spec.cjs", use: { viewport: {width:390,height:844}, isMobile:true, hasTouch:true } },
+    { name: "tablet", testIgnore: "**/generated-site.spec.cjs", use: { viewport: {width:768,height:1024}, hasTouch:true } },
+    { name: "desktop", testIgnore: "**/generated-site.spec.cjs", use: { viewport: {width:1440,height:1000} } },
   ],
   webServer: process.env.PORTFOLIO_PREVIEW_URL ? undefined : {
     command: "node scripts/serve-test-site.cjs",
