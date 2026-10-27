@@ -929,3 +929,25 @@ h3 {
   color: var(--color-text-muted);
   font-size: 0.85rem;
 }
+
+/* Keep milestone details on project pages; cards offer a quick summary. */
+.project-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 24px;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.project-status {
+  padding: 3px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+}
+
+.project-card--compact .project-card-meta {
+  margin-bottom: 16px;
+}

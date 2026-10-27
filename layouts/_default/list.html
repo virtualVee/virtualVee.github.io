@@ -63,19 +63,14 @@
 
         <h2>{{ $project.Title }}</h2>
 
-        {{ with $project.Params.development_date }}
-        <span class="project-date">{{ if $project.Params.finished_date }}Started{{ else }}In development since{{ end }} <time datetime="{{ time.Format "2006-01" . }}">{{ time.Format "January 2006" . }}</time></span>
-        {{ end }}
-
-        {{ with $project.Params.status }}<span class="project-date">{{ . }}</span>{{ end }}
-        {{ with $project.Params.finished_date }}
-        <span class="project-date">{{ $project.Params.finish_label | default "Finished" }} <time datetime="{{ time.Format "2006-01" . }}">{{ time.Format "January 2006" . }}</time></span>
-        {{ end }}
-        {{ with $project.Params.updated_date }}
-        <span class="project-date">Last updated <time datetime="{{ time.Format "2006-01" . }}">{{ time.Format "January 2006" . }}</time></span>
-        {{ end }}
-
         <p>{{ $project.Description | default $project.Summary | plainify }}</p>
+
+        <div class="project-card-meta">
+          {{ with $project.Params.status }}<span class="project-status">{{ . }}</span>{{ end }}
+          {{ with $project.Params.updated_date }}
+          <span class="project-updated">Updated <time datetime="{{ time.Format "2006-01" . }}">{{ time.Format "January 2006" . }}</time></span>
+          {{ end }}
+        </div>
 
         <span class="project-link">
           Explore project <span aria-hidden="true">↗</span>

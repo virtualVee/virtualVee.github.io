@@ -5,7 +5,7 @@ weight: 1
 date: 2026-10-27
 draft: false
 category: "Web design & documentation"
-description: "Building a clear home for my work, with project search, filters and automated checks to support ongoing improvements."
+description: "A Hugo portfolio combining clear content, responsive design and automated testing."
 role: "Content, structure and implementation"
 tools: [Hugo, Markdown, CSS, JavaScript, Node.js, Python, Playwright, GitHub Pages]
 status: "Live · Actively maintained"
