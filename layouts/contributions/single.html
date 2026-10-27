@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div class="container"><section class="section page-content contribution-detail">
+  <p><a href="{{ "contributions/" | relURL }}">All contributions</a></p>
+  <h1>{{ .Title }}</h1>
+  {{ with .Params.repository }}
+    <p>{{ .description }}</p>
+    <p><a href="{{ .url }}">Repository on GitHub</a></p>
+    {{ with .case_study }}{{ with site.GetPage . }}<p><a href="{{ .RelPermalink }}">Read the project case study</a></p>{{ else }}{{ errorf "Contribution case study does not exist: %s" . }}{{ end }}{{ end }}
+    {{ range sort .contributions "date" "desc" }}
+    <article class="contribution-item">
+      <h2><a href="{{ .url }}">{{ .title }}</a></h2>
+      <p>{{ .description }}</p>
+      <p><span class="project-status">{{ .status | humanize }}</span> · <time datetime="{{ .date }}">{{ time.Format "2 January 2006" .date }}</time>{{ with .updated_at }} · Updated <time datetime="{{ . }}">{{ time.Format "2 January 2006" . }}</time>{{ end }}</p>
+      <a href="{{ .url }}">View pull request #{{ .number }} on GitHub</a>
+    </article>
+    {{ end }}
+  {{ end }}
+</section></div>
+{{ end }}

@@ -25,7 +25,7 @@ This portfolio is a project in its own right: a place to bring together my work 
 
 - **Structure and clarity:** Organising the site around a simple Home, About and Projects structure, with concise summaries and room for more detail.
 - **Design and accessibility:** Building custom Hugo templates with responsive layouts, local fonts, light and dark themes, keyboard focus styles and reduced-motion support.
-- **Content and iteration:** Refining my professional introduction, adding profile links and preparing a contact form, and turning development notes into readable project stories.
+- **Content and iteration:** Refining my professional introduction, adding profile links and a contact form, and turning development notes into readable project stories.
 
 ## Keeping the content focused
 
@@ -33,15 +33,13 @@ Each project starts with a short overview, key contributions and next steps, so 
 
 ## Checking changes
 
-I’ve added automated regression tests for project search, combined filters, date sorting, empty states and Reset. A separate check builds the site and inspects internal links, assets, page metadata and the contact-form setup. Browser tests also check that the CV and direct email link are removed, links open in new tabs, and responsive layouts at phone, tablet and desktop widths in both themes.
+Node.js tests cover project controls and contribution tooling. Playwright checks generated pages, links, metadata, the contact form and responsive layouts at phone, tablet and desktop widths in both themes. Tests run locally and in GitHub Actions before deployment.
 
-Node.js’s built-in runner keeps logic tests lightweight. I chose Playwright for real-browser interactions, responsive layouts and submission feedback. An initial Python checker used its built-in HTML parser; I later moved those checks into Playwright to keep one language and reuse existing tooling, without another parsing package. Page checks now need a browser—a reasonable tradeoff for this small site.
-
-The checks run locally with one command and are configured to run in GitHub Actions before deployment. They complement manual phone, keyboard and theme checks; they do not replace a full accessibility review.
+I use these checks alongside manual phone, keyboard and theme reviews. Further accessibility testing remains part of the ongoing work.
 
 ## Working with AI
 
-I use AI assistance to explore wording and implement changes. I set the direction and review the local preview; automated build checks support that review, alongside usability testing still to come.
+I use AI assistance to explore wording and implement changes. I set the direction and review the local preview; automated checks and manual testing support that review.
 
 ## Current state and future improvements
 

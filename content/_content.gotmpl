@@ -1,0 +1,7 @@
+{{ $repositories := partial "contributions/repositories.html" . }}
+{{ if gt (len $repositories) 0 }}
+  {{ .AddPage (dict "path" "contributions" "kind" "section" "title" "Open Source Contributions" "description" "Contributions to open source repositories." "type" "contributions" "params" (dict "repositories" $repositories)) }}
+  {{ range $repositories }}
+    {{ $.AddPage (dict "path" (printf "contributions/%s" .slug) "kind" "page" "title" .repository "description" .description "type" "contributions" "params" (dict "repository" .)) }}
+  {{ end }}
+{{ end }}

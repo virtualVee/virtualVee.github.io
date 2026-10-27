@@ -22,6 +22,17 @@ for (const route of pages) {
   });
 }
 
+
+test("first visit defaults to dark and remembers a chosen light theme", async ({page}) => {
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("button", {name:"Switch to light mode"}).click();
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.goto("/projects/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+
 test("About buttons stack on phones and align in a row on wider screens", async ({page}) => {
   await page.goto("/about/");
   const buttons = page.locator(".about-actions .button");

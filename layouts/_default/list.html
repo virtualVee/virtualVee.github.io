@@ -87,6 +87,7 @@
     </div>
     <p class="project-empty" data-project-empty hidden>No projects match your search and filters. Try another term or reset the controls.</p>
   </section>
+  {{ partial "contributions/preview.html" . }}
 </div>
 <script src="{{ "js/project-filters.js" | relURL }}?v={{ readFile "static/js/project-filters.js" | md5 }}" defer></script>
 {{ end }}

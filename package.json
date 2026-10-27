@@ -6,7 +6,8 @@
     "test:projects": "node --test tests/*.test.cjs",
     "test:site": "playwright test --project site-checks",
     "test:browser": "playwright test",
-    "test:quick": "npm run test:projects"
+    "test:quick": "npm run test:projects",
+    "contributions:check": "node scripts/check-contributions.cjs"
   },
   "engines": {
     "node": ">=22"

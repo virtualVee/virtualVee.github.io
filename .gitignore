@@ -21,3 +21,14 @@ __pycache__/
 
 # Local review recordings
 output/previews/
+
+# Local agent instructions
+/AGENTS.md
+
+# Manual contribution checker review files
+/output/contributions/
+
+# Private documents: local links only; originals live outside this repository
+/docs/maintenance.md
+/docs/backlog.md
+/notes/

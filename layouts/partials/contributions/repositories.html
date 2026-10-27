@@ -1,0 +1,12 @@
+{{ $repositories := slice }}
+{{ range hugo.Data.contributions.repositories }}
+  {{ if gt (len (.contributions | default slice)) 0 }}
+    {{ $activity := "" }}
+    {{ range .contributions }}
+      {{ $date := .updated_at | default .date }}
+      {{ if gt $date $activity }}{{ $activity = $date }}{{ end }}
+    {{ end }}
+    {{ $repositories = $repositories | append (merge . (dict "activity" $activity)) }}
+  {{ end }}
+{{ end }}
+{{ return (sort $repositories "activity" "desc") }}

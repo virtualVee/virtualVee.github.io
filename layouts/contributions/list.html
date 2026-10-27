@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container"><section class="section contributions-section">
+  <p class="eyebrow">Working in the open</p>
+  <h1>{{ .Title }}</h1>
+  {{ $repositories := .Params.repositories }}
+  {{ if ge (len $repositories) 7 }}
+  <div class="project-search-sort" data-contribution-controls hidden>
+    <label class="project-control" for="contribution-sort"><span>Sort repositories</span><select id="contribution-sort" aria-controls="contribution-results"><option value="recent">Most recently active</option><option value="oldest">Least recently active</option><option value="name">Repository name</option></select></label>
+    <label class="project-control" for="contribution-category"><span>Category</span><select id="contribution-category" aria-controls="contribution-results"><option value="">All categories</option>{{ $categories := slice }}{{ range $repositories }}{{ $categories = $categories | append .category }}{{ end }}{{ range sort (uniq $categories) }}<option value="{{ . }}">{{ . }}</option>{{ end }}</select></label>
+  </div>
+  <p data-contribution-status role="status" aria-live="polite" hidden></p>
+  {{ end }}
+  {{ partial "contributions/cards.html" $repositories }}
+</section></div>
+{{ if ge (len .Params.repositories) 7 }}<script src="{{ "js/contributions.js" | relURL }}?v={{ readFile "static/js/contributions.js" | md5 }}" defer></script>{{ end }}
+{{ end }}

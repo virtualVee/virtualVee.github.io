@@ -1,0 +1,11 @@
+<div class="contribution-grid" id="contribution-results">
+{{ range . }}
+  <a class="project-card contribution-card" href="{{ printf "contributions/%s/" .slug | relURL }}" data-contribution-category="{{ .category }}" data-contribution-activity="{{ .activity }}" data-contribution-name="{{ .repository }}">
+    <span class="project-type">{{ .category }}</span>
+    <h3>{{ .repository }}</h3>
+    <p>{{ .description }}</p>
+    <p class="project-card-meta">{{ len .contributions }} contribution{{ if ne (len .contributions) 1 }}s{{ end }} · Updated <time datetime="{{ .activity }}">{{ time.Format "2 January 2006" .activity }}</time></p>
+    <span class="project-link">Explore contributions <span aria-hidden="true">↗</span></span>
+  </a>
+{{ end }}
+</div>

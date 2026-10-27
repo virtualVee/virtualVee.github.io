@@ -1,0 +1,9 @@
+{{ $repositories := partial "contributions/repositories.html" . }}
+{{ if gt (len $repositories) 0 }}
+<section class="section contributions-section" aria-labelledby="contributions-heading">
+  <p class="eyebrow">Working in the open</p>
+  <h2 id="contributions-heading">Open Source Contributions</h2>
+  {{ partial "contributions/cards.html" (first 3 $repositories) }}
+  {{ if ge (len $repositories) 4 }}<p><a class="button button-secondary" href="{{ "contributions/" | relURL }}">View all contributions</a></p>{{ end }}
+</section>
+{{ end }}

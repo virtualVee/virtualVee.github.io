@@ -7,10 +7,8 @@ const vm = require("node:vm");
 // Exercise the shipped script with a minimal DOM adapter, without copying its logic.
 const source = fs.readFileSync(path.join(__dirname, "../static/js/project-filters.js"), "utf8");
 function element(dataset = {}) {
-  const classes = new Set();
   return {
     dataset, hidden: false, value: "", textContent: "", attributes: {}, listeners: {},
-    classList: { add: (...names) => names.forEach(n => classes.add(n)), remove: (...names) => names.forEach(n => classes.delete(n)) },
     setAttribute(name, value) { this.attributes[name] = value; },
     addEventListener(name, listener) { this.listeners[name] = listener; },
     fire(name) { this.listeners[name](); },
