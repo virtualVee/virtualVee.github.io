@@ -8,8 +8,10 @@ category: "Web design & documentation"
 description: "Building a clear home for my work, with project search, filters and automated checks to support ongoing improvements."
 role: "Content, structure and implementation"
 tools: [Hugo, Markdown, CSS, JavaScript, Node.js, Python, Playwright, GitHub Pages]
-status: "In progress"
+status: "Live · Actively maintained"
 year: 2026
+finished_date: 2026-10-27
+finish_label: "Initial release"
 updated_date: 2026-10-27
 development_date: 2026-10-12
 github: "https://github.com/virtualVee/virtualVee.github.io"
@@ -39,8 +41,10 @@ The checks run locally with one command and are configured to run in GitHub Acti
 
 I use AI assistance to explore wording and implement changes. I set the direction and review the local preview; automated build checks support that review, alongside usability testing still to come.
 
-## Progress and next steps
+## Current state and future improvements
 
-The site builds successfully with Hugo, and the automated checks pass locally. The GitHub Pages workflow runs the checks before deployment, and the first release with the test suite passed on GitHub. Content is still evolving, and the accessibility features need further testing with real tasks and devices.
+The portfolio is live, with project search, filtering, date sorting and automated checks before deployment. The initial build is complete, and I continue to maintain the site as my work develops.
 
-Next, I’m developing the project summaries and gathering examples that show the decisions, tradeoffs and lessons behind the work.
+The October 2026 release marks completion of this version of the portfolio, rather than the site’s first-ever publication. The automated checks have passed locally and in GitHub Actions.
+
+Future updates will focus on project screenshots, new case studies and improvements informed by use. Further accessibility testing with real tasks and devices remains part of that work.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build Hugo in scratch storage and audit the generated site using only stdlib."""
 import argparse
+from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 import os
@@ -98,6 +99,16 @@ def audit(site):
         require(any("data-project-filters" in a and "hidden" in a for _, a in projects.elements), "Projects: filters must be hidden until JS is ready")
         for control_id in ("project-search", "project-sort"):
             require(bool(projects.find("label", **{"for": control_id})), "Projects: missing label for " + control_id)
+        for tag, attrs in projects.elements:
+            if tag == "a" and "data-project-type" in attrs:
+                title = attrs.get("href", "project")
+                require(bool(attrs.get("data-project-status", "").strip()), title + ": missing project status")
+                for field in ("started", "updated"):
+                    value = attrs.get("data-project-" + field, "")
+                    try:
+                        date.fromisoformat(value)
+                    except ValueError:
+                        require(False, title + ": missing/invalid " + field + " date")
         options = {a.get("value") for a in projects.find("option")}
         require({"started-newest", "started-oldest", "finished-newest", "finished-oldest", "updated-newest"}.issubset(options), "Projects: missing date sort options")
         require(any(a.get("role") == "status" for _, a in projects.elements), "Projects: missing live result count")

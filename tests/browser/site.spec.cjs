@@ -78,7 +78,7 @@ test("About and footer external links open separate tabs", async ({page,context}
   }
 });
 
-test("search, type filters, finish-date empty state and Reset work in a browser", async ({page}) => {
+test("search, type filters, date sorting and Reset work in a browser", async ({page}) => {
   await page.goto("/projects/");
   const cards = page.locator("[data-project-type]:visible");
   await expect(cards).toHaveCount(2);
@@ -94,8 +94,8 @@ test("search, type filters, finish-date empty state and Reset work in a browser"
   await page.getByRole("combobox",{name:"Sort projects",exact:true}).selectOption("updated-newest");
   await expect(cards.first()).toContainText("Building this portfolio");
   await page.getByRole("combobox",{name:"Sort projects",exact:true}).selectOption("finished-newest");
-  await expect(cards).toHaveCount(0);
-  await expect(page.getByRole("heading",{name:"More projects to come...",exact:true})).toBeVisible();
+  await expect(cards).toHaveCount(1);
+  await expect(cards.first()).toContainText("Building this portfolio");
   await page.getByRole("button",{name:"Reset",exact:true}).click();
   await expect(cards).toHaveCount(2);
   await expect(cards.first()).toContainText("Building this portfolio");
